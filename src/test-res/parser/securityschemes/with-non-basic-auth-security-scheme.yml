@@ -1,0 +1,19 @@
+openapi: "3.0.0"
+paths:
+  /pets:
+    post:
+      summary: Create a pet
+      operationId: createPets
+      parameters:
+        - name: x-header
+          in: header
+          description: How many items to return at one time (max 100)
+          required: true
+          schema:
+            type: string
+            format: int32
+components:
+  securitySchemes:
+    httpBasic:
+      type: http
+      scheme: bearer
