@@ -59,7 +59,7 @@ object ControllerBuilder {
         val httpRequestParam = ParameterSpec.builder("httpRequest",
                 ClassName("io.micronaut.http", "HttpRequest").parameterizedBy(Any::class.asClassName()))
                 .build()
-        val responseType = operation.response?.firstOrNull()?.let { ClassName("io.micronaut.http", "HttpResponse").parameterizedBy(it.toKotlinPoetType()) }
+        val responseType = operation.response?.firstOrNull()?.let { ClassName("io.micronaut.http", "HttpResponse").parameterizedBy(it.toKotlinPoetType(modelMapping)) }
         FunSpec.builder(toCamelCase(operation.type.toString()))
                 .addAnnotation(
                         AnnotationSpec.builder(ClassName("io.micronaut.http.annotation", toTitleCase(operation.type.toString())))

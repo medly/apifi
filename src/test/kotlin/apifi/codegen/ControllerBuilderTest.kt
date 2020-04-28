@@ -52,7 +52,7 @@ class ControllerBuilderTest : DescribeSpec( {
             controllerClass.funSpecs[0].parameters.map { it.toString() } shouldContainExactlyInAnyOrder
                     listOf("@io.micronaut.http.annotation.Body body: models.Pet",
                             "httpRequest: io.micronaut.http.HttpRequest<kotlin.Any>")
-            controllerClass.funSpecs[0].returnType.toString() shouldBe "io.micronaut.http.HttpResponse<PetResponse>"
+            controllerClass.funSpecs[0].returnType.toString() shouldBe "io.micronaut.http.HttpResponse<models.PetResponse>"
         }
 
         it("generate controller method block with all blocks") {
@@ -93,4 +93,4 @@ class ControllerBuilderTest : DescribeSpec( {
 
 })
 
-fun modelMapping() = listOf("Pet" to "models.Pet")
+fun modelMapping() = listOf("Pet" to "models.Pet", "PetResponse" to "models.PetResponse")
