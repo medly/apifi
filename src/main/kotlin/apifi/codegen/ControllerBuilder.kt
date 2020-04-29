@@ -26,7 +26,7 @@ object ControllerBuilder {
         val classSpec = TypeSpec.classBuilder(ClassName(basePackageName, controllerClassName))
                 .addAnnotation(ClassName("io.micronaut.http.annotation", "Controller"))
                 .addProperty(serviceProperty)
-                .addFunctions(generateOperationFunctions(path, modelMapping))
+                .addFunctions(generateOperationFunctions(path, modelMapping, securityDependencies))
 
         securityDependencies.forEach { dependency ->
             primaryConstructor.addParameter(
@@ -42,7 +42,7 @@ object ControllerBuilder {
         return FileSpec.builder(basePackageName, "$controllerClassName.kt").addType(classSpec.build()).addType(serviceClass).build()
     }
 
-    private fun generateOperationFunctions(path: Path, modelMapping: List<Pair<String, String>>): List<FunSpec> = path.operations?.map { operation ->
+    private fun generateOperationFunctions(path: Path, modelMapping: List<Pair<String, String>>, securityDependencies: List<SecurityDependency>): List<FunSpec> = path.operations?.map { operation ->
 
         val queryParams = operation.params?.filter { it.type == ParamType.Query }?.map(QueryParamBuilder::build)
                 ?: emptyList()
@@ -54,7 +54,7 @@ object ControllerBuilder {
                 ?: emptyList()
         val serviceCallParams = queryParams + pathParams + requestBodyParams
 
-        val serviceCallStatement = "service.${toCamelCase(operation.type.toString())}(${serviceCallParams.joinToString { it.name }})"
+        val serviceCallStatement = "io.micronaut.http.HttpResponse.ok(service.${toCamelCase(operation.type.toString())}(${serviceCallParams.joinToString { it.name }}))"
 
         val httpRequestParam = ParameterSpec.builder("httpRequest",
                 ClassName("io.micronaut.http", "HttpRequest").parameterizedBy(Any::class.asClassName()))
@@ -69,7 +69,7 @@ object ControllerBuilder {
                 .addParameters(queryParams + pathParams + headerParams + requestBodyParams)
                 .addParameter(httpRequestParam)
                 .also { responseType?.let { res -> it.returns(res) } }
-                .addStatement("return basicauthorizer.authorize(httpRequest.headers.authorization){io.micronaut.http.HttpResponse.ok(${serviceCallStatement})}")
+                .addStatement(if(securityDependencies.isNotEmpty()) "return basicauthorizer.authorize(httpRequest.headers.authorization){$serviceCallStatement}" else "return $serviceCallStatement")
                 .build()
     } ?: emptyList()
 }

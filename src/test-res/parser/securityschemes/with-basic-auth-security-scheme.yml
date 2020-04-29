@@ -13,7 +13,23 @@ paths:
             type: string
             format: int32
 components:
+  schemas:
+    Pet:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        tag:
+          type: string
   securitySchemes:
     httpBasic:
       type: http
       scheme: basic
+security:
+  - httpBasic: []
