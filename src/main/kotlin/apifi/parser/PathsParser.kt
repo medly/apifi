@@ -1,5 +1,6 @@
 package apifi.parser
 
+import apifi.helpers.toCamelCase
 import apifi.helpers.toCodeGenModel
 import apifi.parser.models.Operation
 import apifi.parser.models.Param
@@ -16,7 +17,7 @@ object PathsParser {
                 }
                 val requestModel = RequestBodyParser.parse(operation.requestBody)
                 val responses = ResponseBodyParser.parse(operation.responses)
-                Operation(httpMethod, params, requestModel, responses)
+                Operation(httpMethod, operation.operationId ?: toCamelCase(httpMethod.toString()), params, requestModel, responses)
             }
             Path(endpoint, operations)
         } ?: emptyList()

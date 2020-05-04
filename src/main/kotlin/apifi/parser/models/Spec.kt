@@ -5,12 +5,13 @@ import io.swagger.v3.oas.models.security.SecurityScheme
 
 data class CommonSpec(val models: List<Model>, val securityDefinitions: List<SecurityDefinition>)
 
-data class Spec(val paths: List<Path>, val models: List<Model>, val securityRequirements: List<String>)
+data class Spec(val name: String, val basePath: String, val paths: List<Path>, val models: List<Model>, val securityRequirements: List<String>)
 
 data class Path(val url: String, val operations: List<Operation>?)
 
 data class Operation(
         val type: PathItem.HttpMethod,
+        val name: String,
         val params: List<Param>?,
         val requestBodyType: String?,
         val response: List<String>?,

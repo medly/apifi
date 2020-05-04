@@ -24,7 +24,7 @@ fun main(args: Array<String>) {
         (commonContent.modelFiles + commonContent.securityFiles.values).forEach { writeToFile(it, outputDir) }
         specFiles.filter { it != commonSpecFile }.forEach { specFile ->
             val openApi = OpenAPIV3Parser().read(specFile.absolutePath)
-            val spec = SpecFileParser.parse(openApi)
+            val spec = SpecFileParser.parse(openApi, specFile.nameWithoutExtension)
             CodeGenerator.generate(spec, "$basePackageName.${specFile.nameWithoutExtension}", commonContent).forEach {
                 writeToFile(it, outputDir)
             }
