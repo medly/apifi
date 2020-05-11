@@ -5,6 +5,7 @@ import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
 import io.kotlintest.matchers.collections.shouldContain
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotlintest.matchers.string.shouldContain
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 import io.swagger.v3.oas.models.PathItem
@@ -83,11 +84,11 @@ class ControllerBuilderTest : DescribeSpec( {
             controllerClass.funSpecs[0].body.toString().trimIndent() shouldBe  "return HttpResponse.ok(service.createPet(limit, petId, body))"
         }
 
-        it("inject service as dependency") {
+        it("inject service & security dependencies") {
             val operation = Operation(PathItem.HttpMethod.POST, "listPets", listOf(), "Pet", listOf("PetResponse"))
 
             val paths = listOf(Path("/pets", listOf(operation)))
-            val controller = ControllerBuilder.build(Spec("pets", "api", paths, emptyList(), emptyList()), emptyList(), "apifi.gen", modelMapping())
+            val controller = ControllerBuilder.build(Spec("pets", "api", paths, emptyList(), emptyList()), listOf(SecurityDependency("BasicAuthorizer", "security", SecurityDefinitionType.BASIC_AUTH)), "apifi.gen", modelMapping())
 
             val controllerClass = controller.members[0] as TypeSpec
             val serviceClass = controller.members[1] as TypeSpec
@@ -98,12 +99,11 @@ class ControllerBuilderTest : DescribeSpec( {
             controllerClass.propertySpecs[0].type.toString() shouldBe "apifi.gen.PetsService"
             controllerClass.propertySpecs[0].modifiers shouldContain KModifier.PRIVATE
 
-            controllerClass.primaryConstructor!!.parameters.map { it.toString() } shouldContainExactlyInAnyOrder
-                    listOf("service: apifi.gen.PetsService")
-            controllerClass.primaryConstructor!!.toString() shouldBe "@javax.inject.Inject\n" +
-                    "constructor(service: apifi.gen.PetsService) {\n" +
-                    "  this.service = service\n" +
-                    "}\n"
+            controllerClass.toString() shouldContain "@io.micronaut.http.annotation.Controller(value = \"/api\")\n" +
+                    "class PetsController @javax.inject.Inject constructor(\n" +
+                    "  private val service: apifi.gen.PetsService,\n" +
+                    "  private val basicauthorizer: security.BasicAuthorizer\n" +
+                    ")"
         }
     }
 

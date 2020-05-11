@@ -19,10 +19,9 @@ object ControllerBuilder {
         val primaryConstructor = FunSpec.constructorBuilder()
                 .addAnnotation(ClassName("javax.inject", "Inject"))
                 .addParameter(ParameterSpec.builder("service", ClassName(basePackageName, serviceClass.name!!)).build())
-                .addStatement("this.service = service")
 
         val serviceProperty = PropertySpec.builder("service", ClassName(basePackageName, serviceClass.name!!))
-                .addModifiers(KModifier.PRIVATE).build()
+                .addModifiers(KModifier.PRIVATE).initializer("service").build()
 
         val classSpec = TypeSpec.classBuilder(ClassName(basePackageName, controllerClassName))
                 .addAnnotation(AnnotationSpec.builder(ClassName("io.micronaut.http.annotation", "Controller"))
@@ -34,10 +33,10 @@ object ControllerBuilder {
         securityDependencies.forEach { dependency ->
             primaryConstructor.addParameter(
                     ParameterSpec.builder(toCamelCase(dependency.name), ClassName(dependency.packageName, dependency.name)).build()
-            ).addStatement("this.${toCamelCase(dependency.name)} = ${toCamelCase(dependency.name)}")
+            )
 
             classSpec.addProperty(PropertySpec.builder(toCamelCase(dependency.name), ClassName(dependency.packageName, dependency.name))
-                    .addModifiers(KModifier.PRIVATE).build())
+                    .addModifiers(KModifier.PRIVATE).initializer(toCamelCase(dependency.name)).build())
         }
 
         classSpec.primaryConstructor(primaryConstructor.build())
