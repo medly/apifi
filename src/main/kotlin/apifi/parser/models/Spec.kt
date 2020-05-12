@@ -43,12 +43,13 @@ enum class ParamType {
 data class SecurityDefinition(val name: String, val type: SecurityDefinitionType)
 
 enum class SecurityDefinitionType {
-    BASIC_AUTH;
+    BASIC_AUTH, BEARER;
 
     companion object {
         fun fromTypeAndScheme(type: SecurityScheme.Type, scheme: String) =
                 when {
                     type == SecurityScheme.Type.HTTP && scheme == "basic" -> BASIC_AUTH
+                    type == SecurityScheme.Type.HTTP && scheme == "bearer" -> BEARER
                     else -> error("Security scheme not supported yet")
                 }
     }

@@ -16,4 +16,4 @@ components:
   securitySchemes:
     httpBasic:
       type: http
-      scheme: bearer
+      scheme: openIdConnect

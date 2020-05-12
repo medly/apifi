@@ -12,7 +12,7 @@ class CommonSpecFileParserTest : DescribeSpec({
 
     describe("parse common specs") {
 
-        it("should parse a security scheme & models specified in open api") {
+        it("should parse basic security scheme & models specified in open api") {
             val file = FileUtils.getFile("src", "test-res", "parser", "securityschemes", "with-basic-auth-security-scheme.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
             val spec = CommonSpecFileParser.parse(openApi)
@@ -20,6 +20,14 @@ class CommonSpecFileParserTest : DescribeSpec({
             spec.securityDefinitions[0] shouldBe SecurityDefinition("httpBasic", SecurityDefinitionType.BASIC_AUTH)
             spec.models.size shouldBe 1
             spec.models[0].name shouldBe "Pet"
+        }
+
+        it("should parse bearer security scheme & models specified in open api") {
+            val file = FileUtils.getFile("src", "test-res", "parser", "securityschemes", "with-bearer-auth-security-scheme.yml").readText().trimIndent()
+            val openApi = OpenAPIV3Parser().readContents(file).openAPI
+            val spec = CommonSpecFileParser.parse(openApi)
+            spec.securityDefinitions.size shouldBe 1
+            spec.securityDefinitions[0] shouldBe SecurityDefinition("httpBearer", SecurityDefinitionType.BEARER)
         }
 
         it("should not throw errors when no security scheme or models are present") {
@@ -31,7 +39,7 @@ class CommonSpecFileParserTest : DescribeSpec({
         }
 
         it("should throw exception when security scheme other than http basic is mentioned") {
-            val file = FileUtils.getFile("src", "test-res", "parser", "securityschemes", "with-non-basic-auth-security-scheme.yml").readText().trimIndent()
+            val file = FileUtils.getFile("src", "test-res", "parser", "securityschemes", "with-unsupported-security-scheme.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
             val exception = shouldThrow<IllegalStateException> { CommonSpecFileParser.parse(openApi) }
             exception.message shouldBe "Security scheme not supported yet"
