@@ -52,7 +52,7 @@ class PathsParserTest : DescribeSpec({
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
             val path = PathsParser.parse(openApi.paths)[0]
             path.url shouldBe "/pets"
-            path.operations!![0].consumes shouldBe "application/json"
+            path.operations!![0].consumes shouldBe listOf("application/json")
         }
     }
 })

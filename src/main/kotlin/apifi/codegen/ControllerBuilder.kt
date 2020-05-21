@@ -69,9 +69,9 @@ object ControllerBuilder {
                                         .addMember("value = %S", path.url)
                                         .build()
                         )
-                        .also { b -> operation.consumes?.let { b.addAnnotation(
+                        .also { b -> operation.consumes?.let { consumes -> b.addAnnotation(
                                 AnnotationSpec.builder(ClassName("io.micronaut.http.annotation", "Consumes"))
-                                        .addMember("value = %S", it)
+                                        .also { ab -> consumes.forEach { ab.addMember("%S", it) } }
                                         .build()
                         ) } }
                         .addParameters(queryParams + pathParams + headerParams + requestBodyParams)

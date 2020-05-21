@@ -46,14 +46,14 @@ class ControllerBuilderTest : DescribeSpec( {
         }
 
         it("generate controller method with request and response") {
-            val operation = Operation(PathItem.HttpMethod.POST, "createPet", listOf(), "Pet", "application/json", listOf("PetResponse"))
+            val operation = Operation(PathItem.HttpMethod.POST, "createPet", listOf(), "Pet", listOf("application/json", "text/plain"), listOf("PetResponse"))
 
             val paths = listOf(Path("/pets", listOf(operation)))
             val controller = ControllerBuilder.build(Spec("pets", "api", paths, emptyList(), emptyList()), emptyList(), "apifi.gen", modelMapping())
 
             val controllerClass = controller.members[0] as TypeSpec
             controllerClass.funSpecs[0].annotations[0].toString() shouldBe "@io.micronaut.http.annotation.Post(value = \"/pets\")"
-            controllerClass.funSpecs[0].annotations[1].toString() shouldBe "@io.micronaut.http.annotation.Consumes(value = \"application/json\")"
+            controllerClass.funSpecs[0].annotations[1].toString() shouldBe "@io.micronaut.http.annotation.Consumes(\"application/json\", \"text/plain\")"
             controllerClass.funSpecs[0].parameters.map { it.toString() } shouldContainExactlyInAnyOrder
                     listOf("@io.micronaut.http.annotation.Body body: models.Pet",
                             "httpRequest: io.micronaut.http.HttpRequest<kotlin.Any>")
@@ -64,7 +64,7 @@ class ControllerBuilderTest : DescribeSpec( {
             val queryParam = Param("limit", "kotlin.Int", true, ParamType.Query)
             val pathParam = Param("petId", "kotlin.Int", true, ParamType.Path)
             val headerParam = Param("x-header", "kotlin.String", true, ParamType.Header)
-            val operation = Operation(PathItem.HttpMethod.POST, "listPets", listOf(queryParam, pathParam, headerParam), "Pet", "application/json", listOf("PetResponse"))
+            val operation = Operation(PathItem.HttpMethod.POST, "listPets", listOf(queryParam, pathParam, headerParam), "Pet", listOf("application/json"), listOf("PetResponse"))
 
             val paths = listOf(Path("/pets", listOf(operation)))
             val controller = ControllerBuilder.build(Spec("pets", "api", paths, emptyList(), emptyList()), listOf(SecurityDependency("httpBasic", "security", SecurityDefinitionType.BASIC_AUTH)), "apifi.gen", modelMapping())

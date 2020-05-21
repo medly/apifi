@@ -25,7 +25,7 @@ class ServiceBuilderTest : DescribeSpec({
             val headerParam = Param("x-header", "kotlin.String", true, ParamType.Header)
 
             val spec = Spec("pets", "api", listOf(Path("/pets", listOf(
-                    Operation(PathItem.HttpMethod.GET, "opName", listOf(queryParam, pathParam, headerParam), "Pet", "application/json", listOf("PetResponse"), SecurityDefinitionType.BASIC_AUTH)
+                    Operation(PathItem.HttpMethod.GET, "opName", listOf(queryParam, pathParam, headerParam), "Pet", listOf("application/json"), listOf("PetResponse"), SecurityDefinitionType.BASIC_AUTH)
             ))), emptyList(), emptyList())
             val serviceClass = ServiceBuilder.build(spec, "Pets")
 
