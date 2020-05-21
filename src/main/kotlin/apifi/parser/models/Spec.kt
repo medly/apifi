@@ -14,6 +14,7 @@ data class Operation(
         val name: String,
         val params: List<Param>?,
         val requestBodyType: String?,
+        val consumes: String?,
         val response: List<String>?,
         val securitySchemeType: SecurityDefinitionType = SecurityDefinitionType.BASIC_AUTH
 )

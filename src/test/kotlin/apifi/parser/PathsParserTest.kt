@@ -47,5 +47,12 @@ class PathsParserTest : DescribeSpec({
             path.operations!![0].params!![0] shouldBe Param("x-header", "kotlin.String", true, ParamType.Header)
             path.operations!![0].name shouldBe "createPets"
         }
+        it("with content type") {
+            val file = FileUtils.getFile("src", "test-res", "parser", "models", "with-separate-schema.yml").readText().trimIndent()
+            val openApi = OpenAPIV3Parser().readContents(file).openAPI
+            val path = PathsParser.parse(openApi.paths)[0]
+            path.url shouldBe "/pets"
+            path.operations!![0].consumes shouldBe "application/json"
+        }
     }
 })

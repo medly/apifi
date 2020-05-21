@@ -15,9 +15,10 @@ object PathsParser {
                 val params = operation.parameters?.map { param ->
                     Param(param.name, param.schema.toCodeGenModel().dataType, param.required, ParamType.fromString(param.`in`))
                 }
+                val consumes = operation.requestBody?.content?.keys?.firstOrNull()
                 val requestModel = RequestBodyParser.parse(operation.requestBody)
                 val responses = ResponseBodyParser.parse(operation.responses)
-                Operation(httpMethod, operation.operationId ?: toCamelCase(httpMethod.toString()), params, requestModel, responses)
+                Operation(httpMethod, operation.operationId ?: toCamelCase(httpMethod.toString()), params, requestModel, consumes, responses)
             }
             Path(endpoint, operations)
         } ?: emptyList()
