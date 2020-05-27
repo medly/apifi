@@ -10,40 +10,20 @@ import java.io.File
 import java.nio.file.FileSystems
 
 fun main(args: Array<String>) {
-    val specFileDir = File(args[0])
+    val specFile = File(args[0])
     val outputDir = File(args[1])
     outputDir.mkdirs()
     val basePackageName = args[2]
 
-    if (!specFileDir.isDirectory || !outputDir.isDirectory) {
+    if (!specFile.isFile || !outputDir.isDirectory) {
         println("invalid spec file or output directory")
     } else {
-        val specFiles = specFiles(specFileDir)
-        val commonSpecFile = specFiles.firstOrNull { it.nameWithoutExtension == "common" }
-        val commonContent = commonContent(commonSpecFile, basePackageName)
-        (commonContent.modelFiles + commonContent.securityFiles.values).forEach { writeToFile(it, outputDir) }
-        specFiles.filter { it != commonSpecFile }.forEach { specFile ->
-            val openApi = OpenAPIV3Parser().read(specFile.absolutePath)
-            val spec = SpecFileParser.parse(openApi, specFile.nameWithoutExtension)
-            CodeGenerator.generate(spec, "$basePackageName.${specFile.nameWithoutExtension}", commonContent).forEach {
-                writeToFile(it, outputDir)
-            }
+        val openApi = OpenAPIV3Parser().read(specFile.absolutePath)
+        val spec = SpecFileParser.parse(openApi, specFile.nameWithoutExtension)
+        CodeGenerator.generate(spec, "$basePackageName.${specFile.nameWithoutExtension}").forEach {
+            writeToFile(it, outputDir)
         }
     }
-}
-
-private fun specFiles(root: File): Sequence<File> {
-    val pathMatcher = FileSystems.getDefault().getPathMatcher("glob:**.yml")!!
-    return root.walkTopDown().filter { file -> pathMatcher.matches(file.toPath()) }
-}
-
-private fun commonContent(commonSpecFile: File?, basePackageName: String): CommonFileContent {
-    if(commonSpecFile != null) {
-        val openApiSpec = OpenAPIV3Parser().read(commonSpecFile.absolutePath)
-        val commonSpec = CommonSpecFileParser.parse(openApiSpec)
-        return CodeGenerator.generateCommon(commonSpec, basePackageName)
-    }
-    return CommonFileContent(emptyList(), emptyMap())
 }
 
 private fun writeToFile(fileSpec: FileSpec, outputDir: File) {
