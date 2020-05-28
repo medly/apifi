@@ -1,13 +1,10 @@
 package apifi
 
 import apifi.codegen.CodeGenerator
-import apifi.codegen.CommonFileContent
-import apifi.parser.CommonSpecFileParser
 import apifi.parser.SpecFileParser
 import com.squareup.kotlinpoet.FileSpec
 import io.swagger.v3.parser.OpenAPIV3Parser
 import java.io.File
-import java.nio.file.FileSystems
 
 fun main(args: Array<String>) {
     val specFile = File(args[0])

@@ -72,6 +72,11 @@ components:
           type: string
         tag:
           type: string
+        child:
+          type: object
+          properties:
+            name:
+              type: string
     Error:
       type: object
       required:

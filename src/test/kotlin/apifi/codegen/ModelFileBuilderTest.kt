@@ -79,6 +79,31 @@ class ModelFileBuilderTest : DescribeSpec({
                     "  val tags: Array<String>?\n" +
                     ")"
         }
+
+        it("should generate models with nested dependency") {
+            val fileSpec = ModelFileBuilder.build(listOf(Model("Pet", listOf(
+                    Property("id", "kotlin.Int", false),
+                    Property("tags", "kotlin.Array<kotlin.String>", true),
+                    Property("child", "Child", true))),
+                    Model("Child", listOf(Property("name", "kotlin.String", false)))),
+                    "com.pets")
+
+            fileSpec.toString().trimIndent() shouldBe "package com.pets.models\n" +
+                    "\n" +
+                    "import kotlin.Array\n" +
+                    "import kotlin.Int\n" +
+                    "import kotlin.String\n" +
+                    "\n" +
+                    "data class Pet(\n" +
+                    "  val id: Int,\n" +
+                    "  val tags: Array<String>?,\n" +
+                    "  val child: Child?\n" +
+                    ")\n" +
+                    "\n" +
+                    "data class Child(\n" +
+                    "  val name: String\n" +
+                    ")"
+        }
     }
 
 })

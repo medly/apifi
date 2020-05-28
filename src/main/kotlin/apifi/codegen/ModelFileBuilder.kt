@@ -7,6 +7,7 @@ import com.squareup.kotlinpoet.*
 object ModelFileBuilder {
     fun build(models: List<Model>, basePackageName: String): FileSpec {
         val packageName = "$basePackageName.models"
+        val baseModelMapping = models.map { it.name to "$packageName.${it.name}" }
         val builder = FileSpec.builder(packageName, "Models.kt")
         models.forEach { model ->
             builder.addType(
@@ -17,12 +18,12 @@ object ModelFileBuilder {
                                             .addParameters(model.properties.map {
                                                 ParameterSpec.builder(
                                                         it.name,
-                                                        it.dataType.toKotlinPoetType().copy(nullable = it.nullable)
+                                                        it.dataType.toKotlinPoetType(baseModelMapping).copy(nullable = it.nullable)
                                                 ).build()
                                             }).build()
                             )
                             .addProperties(model.properties.map {
-                                PropertySpec.builder(it.name, it.dataType.toKotlinPoetType().copy(nullable = it.nullable))
+                                PropertySpec.builder(it.name, it.dataType.toKotlinPoetType(baseModelMapping).copy(nullable = it.nullable))
                                         .initializer(it.name)
                                         .build()
                             })
