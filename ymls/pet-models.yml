@@ -14,10 +14,7 @@ components:
         tag:
           type: string
         child:
-          type: object
-          properties:
-            name:
-              type: string
+          $ref: "#/components/schemas/Child"
     Error:
       type: object
       required:
@@ -28,4 +25,11 @@ components:
           type: integer
           format: int32
         message:
+          type: string
+    Child:
+      type: object
+      required:
+        - name
+      properties:
+        name:
           type: string
