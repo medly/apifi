@@ -3,8 +3,6 @@ package apifi.parser.models
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.security.SecurityScheme
 
-data class CommonSpec(val models: List<Model>, val securityDefinitions: List<SecurityDefinition>)
-
 data class Spec(val name: String, val paths: List<Path>, val models: List<Model>, val securityRequirements: List<String>, val securityDefinitions: List<SecurityDefinition>)
 
 data class Path(val url: String, val operations: List<Operation>?)
