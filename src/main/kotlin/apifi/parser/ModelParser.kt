@@ -27,7 +27,7 @@ object ModelParser {
         return listOf(primaryModel) + models
     }
 
-    private fun shouldCreateModel(property: Schema<Any>) =
+    fun shouldCreateModel(property: Schema<Any>) =
             property is ObjectSchema || (property is ArraySchema && property.items is ObjectSchema)
 
     private fun dataType(property: CodegenProperty, models: List<Model>) =

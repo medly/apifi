@@ -2,24 +2,30 @@ package apifi.parser
 
 import apifi.helpers.toCamelCase
 import apifi.helpers.toCodeGenModel
-import apifi.parser.models.Operation
-import apifi.parser.models.Param
-import apifi.parser.models.ParamType
-import apifi.parser.models.Path
+import apifi.helpers.toTitleCase
+import apifi.parser.models.*
+import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.Paths
 
 object PathsParser {
-    fun parse(paths: Paths?): List<Path> =
-        paths?.map { (endpoint, config) ->
+    fun parse(paths: Paths?): Pair<List<Path>, List<Model>> {
+        val models = mutableListOf<Model>()
+        return (paths?.map { (endpoint, config) ->
             val operations = config.readOperationsMap().map { (httpMethod, operation) ->
                 val params = operation.parameters?.map { param ->
                     Param(param.name, param.schema.toCodeGenModel().dataType, param.required, ParamType.fromString(param.`in`))
                 }
-                val consumes = operation.requestBody?.content?.keys?.toList()
-                val requestModel = RequestBodyParser.parse(operation.requestBody)
+                val request = RequestBodyParser.parse(operation.requestBody, operationSpecifier(operation, httpMethod, endpoint))
+                models.addAll(request?.second ?: emptyList())
                 val responses = ResponseBodyParser.parse(operation.responses)
-                Operation(httpMethod, operation.operationId ?: toCamelCase(httpMethod.toString()), params, requestModel, consumes, responses)
+                Operation(httpMethod, operation.operationId
+                        ?: toCamelCase(httpMethod.toString()), params, request?.first, responses)
             }
             Path(endpoint, operations)
-        } ?: emptyList()
+        } ?: emptyList()) to models
+    }
+
+    private fun operationSpecifier(operation: io.swagger.v3.oas.models.Operation, httpMethod: PathItem.HttpMethod, endpoint: String) =
+            (operation.operationId
+                    ?: toTitleCase(httpMethod.toString() + endpoint.replace(Regex("[^A-Za-z ]"), " ")))
 }

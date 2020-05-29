@@ -11,10 +11,14 @@ data class Operation(
         val type: PathItem.HttpMethod,
         val name: String,
         val params: List<Param>?,
-        val requestBodyType: String?,
-        val consumes: List<String>?,
+        val request: Request?,
         val response: List<String>?,
         val securitySchemeType: SecurityDefinitionType = SecurityDefinitionType.BASIC_AUTH
+)
+
+data class Request(
+        val type: String,
+        val consumes: List<String>?
 )
 
 data class Param(

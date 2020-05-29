@@ -10,8 +10,8 @@ class ServiceBuilderTest : DescribeSpec({
     describe("Service Builder") {
         it("should generate service class with operations") {
             val path = Path("/pets", listOf(
-                    Operation(PathItem.HttpMethod.GET, "getOpName", null, null, null, null, SecurityDefinitionType.BASIC_AUTH),
-                    Operation(PathItem.HttpMethod.POST, "postOpName", null, null, null, null, SecurityDefinitionType.BASIC_AUTH)
+                    Operation(PathItem.HttpMethod.GET, "getOpName", null, null, null, SecurityDefinitionType.BASIC_AUTH),
+                    Operation(PathItem.HttpMethod.POST, "postOpName", null, null, null, SecurityDefinitionType.BASIC_AUTH)
             ))
             val serviceClass = ServiceBuilder.build(path, "Pets")
             serviceClass.name shouldBe "PetsService"
@@ -25,7 +25,7 @@ class ServiceBuilderTest : DescribeSpec({
             val headerParam = Param("x-header", "kotlin.String", true, ParamType.Header)
 
             val path = Path("/pets", listOf(
-                    Operation(PathItem.HttpMethod.GET, "opName", listOf(queryParam, pathParam, headerParam), "Pet", listOf("application/json"), listOf("PetResponse"), SecurityDefinitionType.BASIC_AUTH)
+                    Operation(PathItem.HttpMethod.GET, "opName", listOf(queryParam, pathParam, headerParam), Request("Pet", listOf("application/json")), listOf("PetResponse"), SecurityDefinitionType.BASIC_AUTH)
             ))
             val serviceClass = ServiceBuilder.build(path, "Pets")
 

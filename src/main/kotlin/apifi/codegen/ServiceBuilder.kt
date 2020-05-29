@@ -1,6 +1,5 @@
 package apifi.codegen
 
-import apifi.helpers.toCamelCase
 import apifi.helpers.toKotlinPoetType
 import apifi.parser.models.ParamType
 import apifi.parser.models.Path
@@ -15,8 +14,8 @@ object ServiceBuilder {
                 ParameterSpec.builder(it.name, it.dataType.toKotlinPoetType().copy(nullable = !it.isRequired)).build()
             }
 
-            val requestBodyParam = operation.requestBodyType?.let {
-                ParameterSpec.builder("body", it.toKotlinPoetType()).build()
+            val requestBodyParam = operation.request?.let {
+                ParameterSpec.builder("body", it.type.toKotlinPoetType()).build()
             }
 
             FunSpec.builder(operation.name)

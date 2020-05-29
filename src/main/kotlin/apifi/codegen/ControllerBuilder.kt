@@ -51,7 +51,7 @@ object ControllerBuilder {
                     ?: emptyList()
             val headerParams = operation.params?.filter { it.type == ParamType.Header }?.map(HeaderBuilder::build)
                     ?: emptyList()
-            val requestBodyParams = operation.requestBodyType?.let { listOf(RequestBodyBuilder.build(it, modelMapping)) }
+            val requestBodyParams = operation.request?.let { listOf(RequestBodyBuilder.build(it.type, modelMapping)) }
                     ?: emptyList()
             val serviceCallParams = queryParams + pathParams + requestBodyParams
 
@@ -68,7 +68,7 @@ object ControllerBuilder {
                                     .build()
                     )
                     .also { b ->
-                        operation.consumes?.let { consumes ->
+                        operation.request?.consumes?.let { consumes ->
                             b.addAnnotation(
                                     AnnotationSpec.builder(ClassName("io.micronaut.http.annotation", "Consumes"))
                                             .also { ab -> consumes.forEach { ab.addMember("%S", it) } }
