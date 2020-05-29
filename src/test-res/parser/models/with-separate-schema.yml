@@ -70,13 +70,17 @@ components:
           format: int64
         name:
           type: string
-        tag:
-          type: string
-        child:
-          type: object
-          properties:
-            name:
-              type: string
+        tags:
+          type: array
+          items:
+            type: string
+        children:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
     Error:
       type: object
       required:

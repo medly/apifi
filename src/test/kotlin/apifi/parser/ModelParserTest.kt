@@ -19,10 +19,10 @@ class ModelParserTest: DescribeSpec({
                     Model("Pet", listOf(
                             Property("id", "kotlin.Long", false),
                             Property("name", "kotlin.String", false),
-                            Property("tag", "kotlin.String", true),
-                            Property("child", "Child", true)
+                            Property("tags", "kotlin.Array<kotlin.String>", true),
+                            Property("children", "kotlin.Array<Children>", true)
                     )),
-                    Model("Child", listOf(
+                    Model("Children", listOf(
                             Property("name", "kotlin.String", true)
                     ))
             )
@@ -36,16 +36,20 @@ class ModelParserTest: DescribeSpec({
             val file = FileUtils.getFile("src", "test-res", "parser", "models", "with-cross-reference-schema.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
             val models = openApi.components.schemas.map { ModelParser.modelsFromSchema(it.key, it.value) }
-            models.size shouldBe 2
+            models.size shouldBe 3
             models[0] shouldBe listOf(
                     Model("Pet", listOf(
                             Property("id", "kotlin.Long", false),
                             Property("name", "kotlin.String", false),
                             Property("tag", "kotlin.String", true),
-                            Property("child", "Child", true)
+                            Property("child", "Child", true),
+                            Property("foodChoices", "kotlin.Array<FoodChoice>", true)
                     )
             ))
             models[1] shouldBe listOf(Model("Child", listOf(
+                    Property("name", "kotlin.String", false)
+            )))
+            models[2] shouldBe listOf(Model("FoodChoice", listOf(
                     Property("name", "kotlin.String", false)
             )))
         }

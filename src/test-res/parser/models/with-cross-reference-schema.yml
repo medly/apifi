@@ -74,7 +74,18 @@ components:
           type: string
         child:
           $ref: "#/components/schemas/Child"
+        foodChoices:
+          type: array
+          items:
+            $ref: "#/components/schemas/FoodChoice"
     Child:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    FoodChoice:
       type: object
       required:
         - name
