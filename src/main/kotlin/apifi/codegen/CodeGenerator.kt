@@ -23,9 +23,9 @@ object CodeGenerator {
                 .filter { spec.securityRequirements.contains(it.key.name) }
                 .map { (def, spec) -> SecurityDependency((spec.members.first() as TypeSpec).name!!, spec.packageName, def.type) }
 
-        val controllerFiles = spec.paths.map { path ->
-            ControllerBuilder.build(path, securityDependencies, basePackageName, modelMapping)
-        }
+        val controllerGroups = spec.paths.groupBy { it.operations?.firstOrNull { o -> o.tags != null }?.tags?.firstOrNull() }.filter { it.key != null }
+
+        val controllerFiles = controllerGroups.map { ControllerBuilder.build(it.key!!, it.value, securityDependencies, basePackageName, modelMapping) }
 
         return (controllerFiles + modelFiles)
     }

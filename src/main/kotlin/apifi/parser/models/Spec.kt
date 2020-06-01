@@ -10,6 +10,7 @@ data class Path(val url: String, val operations: List<Operation>?)
 data class Operation(
         val type: PathItem.HttpMethod,
         val name: String,
+        val tags: List<String>?,
         val params: List<Param>?,
         val request: Request?,
         val response: List<String>?,

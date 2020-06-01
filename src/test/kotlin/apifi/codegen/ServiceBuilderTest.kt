@@ -9,14 +9,17 @@ class ServiceBuilderTest : DescribeSpec({
 
     describe("Service Builder") {
         it("should generate service class with operations") {
-            val path = Path("/pets", listOf(
-                    Operation(PathItem.HttpMethod.GET, "getOpName", null, null, null, SecurityDefinitionType.BASIC_AUTH),
-                    Operation(PathItem.HttpMethod.POST, "postOpName", null, null, null, SecurityDefinitionType.BASIC_AUTH)
+            val path1 = Path("/pets", listOf(
+                    Operation(PathItem.HttpMethod.GET, "getOpName", emptyList(), null, null, null, SecurityDefinitionType.BASIC_AUTH),
+                    Operation(PathItem.HttpMethod.POST, "postOpName", emptyList(), null, null, null, SecurityDefinitionType.BASIC_AUTH)
             ))
-            val serviceClass = ServiceBuilder.build(path, "Pets")
+            val path2 = Path("/pets/{petId}", listOf(
+                    Operation(PathItem.HttpMethod.GET, "getPet", emptyList(), null, null, null, SecurityDefinitionType.BASIC_AUTH)
+            ))
+            val serviceClass = ServiceBuilder.build(listOf(path1, path2), "Pets")
             serviceClass.name shouldBe "PetsService"
-            serviceClass.funSpecs.size shouldBe 2
-            serviceClass.toString().replace("\n", "") shouldBe "interface PetsService {  fun getOpName()  fun postOpName()}"
+            serviceClass.funSpecs.size shouldBe 3
+            serviceClass.toString().replace("\n", "") shouldBe "interface PetsService {  fun getOpName()  fun postOpName()  fun getPet()}"
         }
 
         it("should generate service class methods with methods including params") {
@@ -25,9 +28,9 @@ class ServiceBuilderTest : DescribeSpec({
             val headerParam = Param("x-header", "kotlin.String", true, ParamType.Header)
 
             val path = Path("/pets", listOf(
-                    Operation(PathItem.HttpMethod.GET, "opName", listOf(queryParam, pathParam, headerParam), Request("Pet", listOf("application/json")), listOf("PetResponse"), SecurityDefinitionType.BASIC_AUTH)
+                    Operation(PathItem.HttpMethod.GET, "opName", emptyList(), listOf(queryParam, pathParam, headerParam), Request("Pet", listOf("application/json")), listOf("PetResponse"), SecurityDefinitionType.BASIC_AUTH)
             ))
-            val serviceClass = ServiceBuilder.build(path, "Pets")
+            val serviceClass = ServiceBuilder.build(listOf(path), "Pets")
 
             serviceClass.funSpecs.size shouldBe 1
             serviceClass.funSpecs[0].toString().replace("\n", "") shouldBe "abstract fun opName(  limit: kotlin.Int,  petId: kotlin.Int,  body: Pet): PetResponse"

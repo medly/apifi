@@ -19,6 +19,7 @@ class PathsParserTest : DescribeSpec({
             path.operations!![0].params shouldBe null
             path.operations!![0].type shouldBe HttpMethod.GET
             path.operations!![0].name shouldBe "get"
+            path.operations!![0].tags shouldBe listOf("pets")
         }
         it("with query params") {
             val file = FileUtils.getFile("src", "test-res", "parser", "params", "with-query-params.yml").readText().trimIndent()

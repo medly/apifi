@@ -3,3 +3,5 @@ paths:
   /pets:
     get:
       summary: List all pets
+      tags:
+        - pets

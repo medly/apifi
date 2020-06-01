@@ -6,25 +6,27 @@ import apifi.parser.models.Path
 import com.squareup.kotlinpoet.*
 
 object ServiceBuilder {
-    fun build(path: Path, baseName: String): TypeSpec {
-        val serviceMethods = path.operations?.map { operation ->
-            val queryParams = operation.params?.filter { it.type == ParamType.Query } ?: emptyList()
-            val pathParams = operation.params?.filter { it.type == ParamType.Path } ?: emptyList()
-            val params = (queryParams + pathParams).map {
-                ParameterSpec.builder(it.name, it.dataType.toKotlinPoetType().copy(nullable = !it.isRequired)).build()
-            }
+    fun build(paths: List<Path>, baseName: String): TypeSpec {
+        val serviceMethods = paths.flatMap { path ->
+            path.operations?.map { operation ->
+                val queryParams = operation.params?.filter { it.type == ParamType.Query } ?: emptyList()
+                val pathParams = operation.params?.filter { it.type == ParamType.Path } ?: emptyList()
+                val params = (queryParams + pathParams).map {
+                    ParameterSpec.builder(it.name, it.dataType.toKotlinPoetType().copy(nullable = !it.isRequired)).build()
+                }
 
-            val requestBodyParam = operation.request?.let {
-                ParameterSpec.builder("body", it.type.toKotlinPoetType()).build()
-            }
+                val requestBodyParam = operation.request?.let {
+                    ParameterSpec.builder("body", it.type.toKotlinPoetType()).build()
+                }
 
-            FunSpec.builder(operation.name)
-                    .addModifiers(KModifier.ABSTRACT)
-                    .addParameters(params)
-                    .also { requestBodyParam?.let { req -> it.addParameter(req) } }
-                    .also { (operation.response?.firstOrNull()?.let { res -> it.returns(res.toKotlinPoetType()) }) }
-                    .build()
-        } ?: emptyList()
+                FunSpec.builder(operation.name)
+                        .addModifiers(KModifier.ABSTRACT)
+                        .addParameters(params)
+                        .also { requestBodyParam?.let { req -> it.addParameter(req) } }
+                        .also { (operation.response?.firstOrNull()?.let { res -> it.returns(res.toKotlinPoetType()) }) }
+                        .build()
+            } ?: emptyList()
+        }
 
         return TypeSpec.interfaceBuilder("${baseName}Service")
                 .addFunctions(serviceMethods).build()
