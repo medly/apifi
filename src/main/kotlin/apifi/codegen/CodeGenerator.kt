@@ -11,7 +11,8 @@ import com.squareup.kotlinpoet.TypeSpec
 object CodeGenerator {
     fun generate(spec: Spec, basePackageName: String): List<FileSpec> {
         val modelFiles: List<FileSpec> = if(spec.models.isNotEmpty()) listOf(ModelFileBuilder.build(spec.models, basePackageName)) else emptyList()
-        val modelMapping = modelFiles.flatMap { it.members.mapNotNull { m -> (m as TypeSpec).name }.map { name -> name to "${it.packageName}.$name" } }
+        val responseModelFile = ResponseModelBuilder.build(basePackageName)
+        val modelMapping = (modelFiles + responseModelFile).flatMap { it.members.mapNotNull { m -> (m as TypeSpec).name }.map { name -> name to "${it.packageName}.$name" } }
         val securityFiles = spec.securityDefinitions.fold<SecurityDefinition, Map<SecurityDefinition, FileSpec>>(mapOf(), { acc, securityDefinition ->
             when(securityDefinition.type) {
                 SecurityDefinitionType.BASIC_AUTH -> acc + mapOf(securityDefinition to BasicAuthSecurityStubBuilder.build(basePackageName))
@@ -27,7 +28,7 @@ object CodeGenerator {
 
         val controllerFiles = controllerGroups.map { ControllerBuilder.build(it.key!!, it.value, securityDependencies, basePackageName, modelMapping) }
 
-        return (controllerFiles + modelFiles)
+        return (controllerFiles + modelFiles + responseModelFile)
     }
 
 }
