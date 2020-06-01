@@ -1,0 +1,23 @@
+package com.pets
+
+import com.pets.models.GetStoreInventoryResponse
+import io.micronaut.http.HttpRequest
+import io.micronaut.http.HttpResponse
+import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Get
+import javax.inject.Inject
+import kotlin.Any
+import kotlin.Array
+
+@Controller
+class StoreController @Inject constructor(
+  private val service: StoreService
+) {
+  @Get(value = "/store/inventory")
+  fun get(httpRequest: HttpRequest<Any>): HttpResponse<Array<GetStoreInventoryResponse>> =
+      HttpResponse.ok(service.get())
+}
+
+interface StoreService {
+  fun get(): Array<GetStoreInventoryResponse>
+}

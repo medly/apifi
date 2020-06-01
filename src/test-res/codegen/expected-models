@@ -1,0 +1,27 @@
+package com.pets.models
+
+import kotlin.Array
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+
+data class Pet(
+  val id: Long,
+  val name: String,
+  val tags: Array<String>?,
+  val children: Array<Children>?
+)
+
+data class Children(
+  val name: String?
+)
+
+data class Error(
+  val code: Int,
+  val message: String
+)
+
+data class GetStoreInventoryResponse(
+  val name: String?,
+  val stock: Int?
+)

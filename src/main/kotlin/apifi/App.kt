@@ -16,7 +16,7 @@ fun main(args: Array<String>) {
         println("invalid spec file or output directory")
     } else {
         val openApi = OpenAPIV3Parser().read(specFile.absolutePath)
-        val spec = SpecFileParser.parse(openApi, specFile.nameWithoutExtension)
+        val spec = SpecFileParser.parse(openApi)
         CodeGenerator.generate(spec, "$basePackageName.${specFile.nameWithoutExtension}").forEach {
             writeToFile(it, outputDir)
         }

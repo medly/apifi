@@ -1,0 +1,36 @@
+package com.pets
+
+import com.pets.models.Error
+import com.pets.models.Pet
+import io.micronaut.http.HttpRequest
+import io.micronaut.http.HttpResponse
+import io.micronaut.http.annotation.Body
+import io.micronaut.http.annotation.Consumes
+import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.PathVariable
+import io.micronaut.http.annotation.Post
+import javax.inject.Inject
+import kotlin.Any
+import kotlin.Array
+import kotlin.String
+
+@Controller
+class PetsController @Inject constructor(
+  private val service: PetsService
+) {
+  @Post(value = "/pets")
+  @Consumes("application/json")
+  fun createPets(@Body body: Array<Pet>, httpRequest: HttpRequest<Any>): HttpResponse<Error> =
+      HttpResponse.ok(service.createPets(body))
+
+  @Get(value = "/pets/{petId}")
+  fun showPetById(@PathVariable petId: String, httpRequest: HttpRequest<Any>): HttpResponse<Pet> =
+      HttpResponse.ok(service.showPetById(petId))
+}
+
+interface PetsService {
+  fun createPets(body: Array<Pet>): Error
+
+  fun showPetById(petId: String): Pet
+}
