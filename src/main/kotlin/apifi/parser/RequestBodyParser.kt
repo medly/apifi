@@ -10,8 +10,10 @@ import io.swagger.v3.oas.models.parameters.RequestBody
 
 object RequestBodyParser {
     fun parse(requestBody: RequestBody?, operationSpecifier: String): Pair<Request, List<Model>>? {
-        val consumes = requestBody?.content?.keys?.toList()
-        return requestBody?.content?.entries?.firstOrNull()?.value?.schema?.let {
+        val consumes = requestBody?.content?.keys?.toList() ?: emptyList()
+        return if (consumes.contains("multipart/form-data")) {
+            Request("io.micronaut.http.multipart.CompleteFileUpload", consumes) to emptyList()
+        } else requestBody?.content?.entries?.firstOrNull()?.value?.schema?.let {
             if (shouldCreateModel(it)) ModelParser.modelsFromSchema(requestModelName(operationSpecifier), it).let { m -> requestBodyType(m.first().name, it) to m }
             else parseReference(it) to emptyList()
         }?.let { Request(it.first, consumes) to it.second }

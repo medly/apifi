@@ -16,7 +16,9 @@ object ServiceBuilder {
                 }
 
                 val requestBodyParam = operation.request?.let {
-                    ParameterSpec.builder("body", it.type.toKotlinPoetType()).build()
+                    ParameterSpec.builder("body",
+                            (if(it.type == "io.micronaut.http.multipart.CompleteFileUpload") "java.io.File" else it.type).toKotlinPoetType())
+                            .build()
                 }
 
                 FunSpec.builder(operation.name)

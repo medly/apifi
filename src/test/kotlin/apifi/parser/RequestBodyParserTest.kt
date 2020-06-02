@@ -32,5 +32,13 @@ class RequestBodyParserTest : DescribeSpec({
                     ))
             )
         }
+
+        it("should generate request for multipart content type") {
+            val file = FileUtils.getFile("src", "test-res", "parser", "request", "with-multipart-content-type.yml").readText().trimIndent()
+            val openApi = OpenAPIV3Parser().readContents(file).openAPI
+            val request = RequestBodyParser.parse(openApi.paths["/pet/{id}/uploadDoc"]?.post?.requestBody, "uploadDocument")
+            request?.first shouldBe Request("io.micronaut.http.multipart.CompleteFileUpload", listOf("multipart/form-data"))
+            request?.second shouldBe emptyList()
+        }
     }
 })

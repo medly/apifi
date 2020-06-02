@@ -10,7 +10,7 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 import io.swagger.v3.oas.models.PathItem
 
-class ControllerBuilderTest : DescribeSpec( {
+class ControllerBuilderTest : DescribeSpec({
 
     describe("Controller Builder") {
         it("generate controller class with controller annotation") {
@@ -78,7 +78,7 @@ class ControllerBuilderTest : DescribeSpec( {
             val controller = ControllerBuilder.build("pets", listOf(Path("/pets", listOf(operation))), listOf(SecurityDependency("httpBasic", "security", SecurityDefinitionType.BASIC_AUTH)), "apifi.gen", modelMapping())
 
             val controllerClass = controller.members[0] as TypeSpec
-            controllerClass.funSpecs[0].body.toString().trimIndent() shouldBe  "return basicauthorizer.authorize(httpRequest.headers.authorization){HttpResponse.ok(service.listPets(limit, petId, body))}"
+            controllerClass.funSpecs[0].body.toString().trimIndent() shouldBe "return basicauthorizer.authorize(httpRequest.headers.authorization){HttpResponse.ok(service.listPets(limit, petId, body))}"
         }
 
         it("generate controller method block with all blocks when security dependencies are not present") {
@@ -90,7 +90,7 @@ class ControllerBuilderTest : DescribeSpec( {
             val controller = ControllerBuilder.build("pets", listOf(Path("/pets", listOf(operation))), emptyList(), "apifi.gen", modelMapping())
 
             val controllerClass = controller.members[0] as TypeSpec
-            controllerClass.funSpecs[0].body.toString().trimIndent() shouldBe  "return HttpResponse.ok(service.createPet(limit, petId, body))"
+            controllerClass.funSpecs[0].body.toString().trimIndent() shouldBe "return HttpResponse.ok(service.createPet(limit, petId, body))"
         }
 
         it("inject service & security dependencies") {
@@ -112,6 +112,15 @@ class ControllerBuilderTest : DescribeSpec( {
                     "  private val service: apifi.gen.PetsService,\n" +
                     "  private val basicauthorizer: security.BasicAuthorizer\n" +
                     ")"
+        }
+
+        it("should convert multipart file to java file") {
+            val operation = Operation(PathItem.HttpMethod.POST, "uploadDocument", emptyList(), emptyList(), Request("io.micronaut.http.multipart.CompleteFileUpload", listOf("multipart/form-data")), null)
+
+            val controller = ControllerBuilder.build("pets", listOf(Path("/pets", listOf(operation))), listOf(SecurityDependency("BasicAuthorizer", "security", SecurityDefinitionType.BASIC_AUTH)), "apifi.gen", modelMapping())
+
+            val controllerClass = controller.members[0] as TypeSpec
+            controllerClass.funSpecs[0].body.toString().trimIndent() shouldBe "return basicauthorizer.authorize(httpRequest.headers.authorization){HttpResponse.ok(service.uploadDocument(java.io.File.createTempFile(body.filename, \"\").also { it.writeBytes(body.bytes) }))}"
         }
     }
 
