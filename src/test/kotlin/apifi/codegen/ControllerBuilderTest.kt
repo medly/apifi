@@ -127,4 +127,4 @@ class ControllerBuilderTest : DescribeSpec({
 
 })
 
-fun modelMapping() = listOf("Pet" to "models.Pet", "PetResponse" to "models.PetResponse")
+fun modelMapping() = mapOf("Pet" to "models.Pet", "PetResponse" to "models.PetResponse")
