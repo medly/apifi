@@ -23,8 +23,12 @@ paths:
                 $ref: '#/components/schemas/Pet'
         required: true
       responses:
-        '201':
+        '200':
           description: Null response
+          content:
+            text/plain:
+              schema:
+                type: string
         default:
           description: unexpected error
           content:

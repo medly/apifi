@@ -1,6 +1,5 @@
 package com.pets
 
-import com.pets.models.Error
 import com.pets.models.Pet
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
@@ -21,16 +20,27 @@ class PetsController @Inject constructor(
 ) {
   @Post(value = "/pets")
   @Consumes("application/json")
-  fun createPets(@Body body: Array<Pet>, httpRequest: HttpRequest<Any>): HttpResponse<Error> =
-      HttpResponse.ok(service.createPets(body))
+  fun createPets(@Body body: Array<Pet>, httpRequest: HttpRequest<Any>): HttpResponse<Any> {
+    val response = service.createPets(body)
+        			return when(response.status) {
+        				com.pets.models.ResponseType.SUCCESS -> HttpResponse.ok(response.body as kotlin.String)
+        				else -> HttpResponse.ok(response.body as com.pets.models.Error)
+        			}
+  }
 
   @Get(value = "/pets/{petId}")
-  fun showPetById(@PathVariable petId: String, httpRequest: HttpRequest<Any>): HttpResponse<Pet> =
-      HttpResponse.ok(service.showPetById(petId))
+  fun showPetById(@PathVariable petId: String, httpRequest: HttpRequest<Any>): HttpResponse<Any> {
+    val response = service.showPetById(petId)
+        			return when(response.status) {
+        				com.pets.models.ResponseType.SUCCESS -> HttpResponse.ok(response.body as
+            com.pets.models.Pet)
+        				else -> HttpResponse.ok(response.body as com.pets.models.Error)
+        			}
+  }
 }
 
 interface PetsService {
-  fun createPets(body: Array<Pet>): Error
+  fun createPets(body: Array<Pet>): Any
 
-  fun showPetById(petId: String): Pet
+  fun showPetById(petId: String): Any
 }

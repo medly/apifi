@@ -3,10 +3,13 @@ package apifi.codegen
 import apifi.helpers.toKotlinPoetType
 import apifi.parser.models.ParamType
 import apifi.parser.models.Path
-import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.ParameterSpec
+import com.squareup.kotlinpoet.TypeSpec
 
 object ServiceBuilder {
-    fun build(paths: List<Path>, baseName: String): TypeSpec {
+    fun build(paths: List<Path>, baseName: String, modelMapping: Map<String, String>): TypeSpec {
         val serviceMethods = paths.flatMap { path ->
             path.operations?.map { operation ->
                 val queryParams = operation.params?.filter { it.type == ParamType.Query } ?: emptyList()
@@ -25,7 +28,7 @@ object ServiceBuilder {
                         .addModifiers(KModifier.ABSTRACT)
                         .addParameters(params)
                         .also { requestBodyParam?.let { req -> it.addParameter(req) } }
-                        .also { (operation.response?.firstOrNull()?.let { res -> it.returns(res.toKotlinPoetType()) }) }
+                        .also { operation.responseType(modelMapping)?.let { res -> it.returns(res) } }
                         .build()
             } ?: emptyList()
         }

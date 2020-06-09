@@ -33,11 +33,17 @@ class ControllerBuilderTest : DescribeSpec({
             val controllerClass = controller.members[0] as TypeSpec
             controllerClass.funSpecs.size shouldBe 3
             controllerClass.funSpecs[0].toString() shouldBe "@io.micronaut.http.annotation.Get(value = \"/pets\")\n" +
-                    "fun getOpName(httpRequest: io.micronaut.http.HttpRequest<kotlin.Any>) = HttpResponse.ok(service.getOpName())\n"
+                    "fun getOpName(httpRequest: io.micronaut.http.HttpRequest<kotlin.Any>) {\n" +
+					"  service.getOpName()\n" +
+					"}\n"
             controllerClass.funSpecs[1].toString() shouldBe "@io.micronaut.http.annotation.Post(value = \"/pets\")\n" +
-                    "fun postOpName(httpRequest: io.micronaut.http.HttpRequest<kotlin.Any>) = HttpResponse.ok(service.postOpName())\n"
+					"fun postOpName(httpRequest: io.micronaut.http.HttpRequest<kotlin.Any>) {\n" +
+					"  service.postOpName()\n" +
+					"}\n"
             controllerClass.funSpecs[2].toString() shouldBe "@io.micronaut.http.annotation.Get(value = \"/pets/{petId}\")\n" +
-                    "fun getPet(httpRequest: io.micronaut.http.HttpRequest<kotlin.Any>) = HttpResponse.ok(service.getPet())\n"
+					"fun getPet(httpRequest: io.micronaut.http.HttpRequest<kotlin.Any>) {\n" +
+					"  service.getPet()\n" +
+					"}\n"
         }
         it("generate controller method with query, path and header params") {
             val queryParam = Param("limit", "kotlin.Int", true, ParamType.Query)
@@ -56,7 +62,7 @@ class ControllerBuilderTest : DescribeSpec({
         }
 
         it("generate controller method with request and response") {
-            val operation = Operation(PathItem.HttpMethod.POST, "createPet", emptyList(), emptyList(), Request("Pet", listOf("application/json", "text/plain")), listOf("PetResponse"))
+            val operation = Operation(PathItem.HttpMethod.POST, "createPet", emptyList(), emptyList(), Request("Pet", listOf("application/json", "text/plain")), listOf(Response("200", "PetResponse")))
 
             val controller = ControllerBuilder.build("pets", listOf(Path("/pets", listOf(operation))), emptyList(), "apifi.gen", modelMapping())
 
@@ -73,28 +79,30 @@ class ControllerBuilderTest : DescribeSpec({
             val queryParam = Param("limit", "kotlin.Int", true, ParamType.Query)
             val pathParam = Param("petId", "kotlin.Int", true, ParamType.Path)
             val headerParam = Param("x-header", "kotlin.String", true, ParamType.Header)
-            val operation = Operation(PathItem.HttpMethod.POST, "listPets", emptyList(), listOf(queryParam, pathParam, headerParam), Request("Pet", listOf("application/json")), listOf("PetResponse"))
+            val operation = Operation(PathItem.HttpMethod.POST, "listPets", emptyList(), listOf(queryParam, pathParam, headerParam), Request("Pet", listOf("application/json")), listOf(Response("200", "PetResponse")))
 
             val controller = ControllerBuilder.build("pets", listOf(Path("/pets", listOf(operation))), listOf(SecurityDependency("httpBasic", "security", SecurityDefinitionType.BASIC_AUTH)), "apifi.gen", modelMapping())
 
             val controllerClass = controller.members[0] as TypeSpec
-            controllerClass.funSpecs[0].body.toString().trimIndent() shouldBe "return basicauthorizer.authorize(httpRequest.headers.authorization){HttpResponse.ok(service.listPets(limit, petId, body))}"
+            controllerClass.funSpecs[0].body.toString().trimIndent() shouldBe "return basicauthorizer.authorize(httpRequest.headers.authorization){val response = service.listPets(limit, petId, body)\n" +
+					"    \t\t\treturn HttpResponse.ok(response.body)}"
         }
 
         it("generate controller method block with all blocks when security dependencies are not present") {
             val queryParam = Param("limit", "kotlin.Int", true, ParamType.Query)
             val pathParam = Param("petId", "kotlin.Int", true, ParamType.Path)
             val headerParam = Param("x-header", "kotlin.String", true, ParamType.Header)
-            val operation = Operation(PathItem.HttpMethod.POST, "createPet", emptyList(), listOf(queryParam, pathParam, headerParam), Request("Pet", null), listOf("PetResponse"))
+            val operation = Operation(PathItem.HttpMethod.POST, "createPet", emptyList(), listOf(queryParam, pathParam, headerParam), Request("Pet", null), listOf(Response("200", "PetResponse")))
 
             val controller = ControllerBuilder.build("pets", listOf(Path("/pets", listOf(operation))), emptyList(), "apifi.gen", modelMapping())
 
             val controllerClass = controller.members[0] as TypeSpec
-            controllerClass.funSpecs[0].body.toString().trimIndent() shouldBe "return HttpResponse.ok(service.createPet(limit, petId, body))"
+            controllerClass.funSpecs[0].body.toString().trimIndent() shouldBe "val response = service.createPet(limit, petId, body)\n" +
+					"    \t\t\treturn HttpResponse.ok(response.body)"
         }
 
         it("inject service & security dependencies") {
-            val operation = Operation(PathItem.HttpMethod.POST, "listPets", listOf(), emptyList(), Request("Pet", null), listOf("PetResponse"))
+            val operation = Operation(PathItem.HttpMethod.POST, "listPets", listOf(), emptyList(), Request("Pet", null), listOf(Response("200", "PetResponse")))
 
             val controller = ControllerBuilder.build("pets", listOf(Path("/pets", listOf(operation))), listOf(SecurityDependency("BasicAuthorizer", "security", SecurityDefinitionType.BASIC_AUTH)), "apifi.gen", modelMapping())
 
@@ -112,15 +120,6 @@ class ControllerBuilderTest : DescribeSpec({
                     "  private val service: apifi.gen.PetsService,\n" +
                     "  private val basicauthorizer: security.BasicAuthorizer\n" +
                     ")"
-        }
-
-        it("should convert multipart file to java file") {
-            val operation = Operation(PathItem.HttpMethod.POST, "uploadDocument", emptyList(), emptyList(), Request("io.micronaut.http.multipart.CompleteFileUpload", listOf("multipart/form-data")), null)
-
-            val controller = ControllerBuilder.build("pets", listOf(Path("/pets", listOf(operation))), listOf(SecurityDependency("BasicAuthorizer", "security", SecurityDefinitionType.BASIC_AUTH)), "apifi.gen", modelMapping())
-
-            val controllerClass = controller.members[0] as TypeSpec
-            controllerClass.funSpecs[0].body.toString().trimIndent() shouldBe "return basicauthorizer.authorize(httpRequest.headers.authorization){HttpResponse.ok(service.uploadDocument(java.io.File.createTempFile(body.filename, \"\").also { it.writeBytes(body.bytes) }))}"
         }
     }
 

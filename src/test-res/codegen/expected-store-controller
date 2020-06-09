@@ -14,8 +14,10 @@ class StoreController @Inject constructor(
   private val service: StoreService
 ) {
   @Get(value = "/store/inventory")
-  fun get(httpRequest: HttpRequest<Any>): HttpResponse<Array<GetStoreInventoryResponse>> =
-      HttpResponse.ok(service.get())
+  fun get(httpRequest: HttpRequest<Any>): HttpResponse<Array<GetStoreInventoryResponse>> {
+    val response = service.get()
+        			return HttpResponse.ok(response.body)
+  }
 }
 
 interface StoreService {

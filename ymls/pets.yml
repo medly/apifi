@@ -59,8 +59,6 @@ post:
                 $ref: "pet-models.yml#/components/schemas/Child"
     required: true
   responses:
-    '201':
-      description: Null response
     default:
       description: unexpected error
       content:
