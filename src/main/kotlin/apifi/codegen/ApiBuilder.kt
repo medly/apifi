@@ -15,19 +15,19 @@ object ApiBuilder {
         val baseName = toTitleCase(name)
         val controllerClassName = "${baseName}Api"
 
-        val serviceClass = ServiceBuilder.build(paths, baseName)
+        val controllerInterfaceClass = ControllerInterfaceBuilder.build(paths, baseName)
 
         val primaryConstructor = FunSpec.constructorBuilder()
                 .addAnnotation(ClassName("javax.inject", "Inject"))
-                .addParameter(ParameterSpec.builder("service", ClassName(basePackageName, serviceClass.name!!)).build())
+                .addParameter(ParameterSpec.builder("controller", ClassName(basePackageName, controllerInterfaceClass.name!!)).build())
 
-        val serviceProperty = PropertySpec.builder("service", ClassName(basePackageName, serviceClass.name!!))
-                .addModifiers(KModifier.PRIVATE).initializer("service").build()
+        val controllerProperty = PropertySpec.builder("controller", ClassName(basePackageName, controllerInterfaceClass.name!!))
+                .addModifiers(KModifier.PRIVATE).initializer("controller").build()
 
         val classSpec = TypeSpec.classBuilder(ClassName(basePackageName, controllerClassName))
                 .addAnnotation(AnnotationSpec.builder(ClassName("io.micronaut.http.annotation", "Controller"))
                         .build())
-                .addProperty(serviceProperty)
+                .addProperty(controllerProperty)
                 .addFunctions(generateOperationFunctions(paths, modelMapping, securityDependencies))
 
         securityDependencies.forEach { dependency ->
@@ -41,7 +41,7 @@ object ApiBuilder {
 
         classSpec.primaryConstructor(primaryConstructor.build())
 
-        return FileSpec.builder(basePackageName, "$controllerClassName.kt").addType(classSpec.build()).addType(serviceClass).build()
+        return FileSpec.builder(basePackageName, "$controllerClassName.kt").addType(classSpec.build()).addType(controllerInterfaceClass).build()
     }
 
     private fun generateOperationFunctions(paths: List<Path>, modelMapping: List<Pair<String, String>>, securityDependencies: List<SecurityDependency>): List<FunSpec> {

@@ -101,15 +101,15 @@ class ApiBuilderTest : DescribeSpec({
             val controllerClass = controller.members[0] as TypeSpec
             val serviceClass = controller.members[1] as TypeSpec
             controllerClass.name shouldBe "PetsApi"
-            serviceClass.name shouldBe "PetsService"
+            serviceClass.name shouldBe "PetsController"
 
-            controllerClass.propertySpecs[0].name shouldBe "service"
-            controllerClass.propertySpecs[0].type.toString() shouldBe "apifi.gen.PetsService"
+            controllerClass.propertySpecs[0].name shouldBe "controller"
+            controllerClass.propertySpecs[0].type.toString() shouldBe "apifi.gen.PetsController"
             controllerClass.propertySpecs[0].modifiers shouldContain KModifier.PRIVATE
 
             controllerClass.toString() shouldContain "@io.micronaut.http.annotation.Controller\n" +
                     "class PetsApi @javax.inject.Inject constructor(\n" +
-                    "  private val service: apifi.gen.PetsService,\n" +
+                    "  private val controller: apifi.gen.PetsController,\n" +
                     "  private val basicauthorizer: security.BasicAuthorizer\n" +
                     ")"
         }

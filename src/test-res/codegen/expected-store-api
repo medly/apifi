@@ -11,13 +11,13 @@ import kotlin.Array
 
 @Controller
 class StoreApi @Inject constructor(
-  private val service: StoreService
+  private val controller: StoreController
 ) {
   @Get(value = "/store/inventory")
   fun get(httpRequest: HttpRequest<Any>): HttpResponse<Array<GetStoreInventoryResponse>> =
       HttpResponse.ok(service.get())
 }
 
-interface StoreService {
+interface StoreController {
   fun get(): Array<GetStoreInventoryResponse>
 }
