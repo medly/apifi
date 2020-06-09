@@ -9,11 +9,11 @@ import apifi.parser.models.Path
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 
-object ControllerBuilder {
+object ApiBuilder {
 
     fun build(name: String, paths: List<Path>, securityDependencies: List<SecurityDependency>, basePackageName: String, modelMapping: List<Pair<String, String>>): FileSpec {
         val baseName = toTitleCase(name)
-        val controllerClassName = "${baseName}Controller"
+        val controllerClassName = "${baseName}Api"
 
         val serviceClass = ServiceBuilder.build(paths, baseName)
 

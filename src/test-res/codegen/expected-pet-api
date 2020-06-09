@@ -16,7 +16,7 @@ import kotlin.Array
 import kotlin.String
 
 @Controller
-class PetsController @Inject constructor(
+class PetsApi @Inject constructor(
   private val service: PetsService
 ) {
   @Post(value = "/pets")

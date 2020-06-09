@@ -10,7 +10,7 @@ import kotlin.Any
 import kotlin.Array
 
 @Controller
-class StoreController @Inject constructor(
+class StoreApi @Inject constructor(
   private val service: StoreService
 ) {
   @Get(value = "/store/inventory")
