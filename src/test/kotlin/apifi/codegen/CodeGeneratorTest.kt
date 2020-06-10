@@ -16,12 +16,12 @@ class CodeGeneratorTest : DescribeSpec({
             val fileSpecs = CodeGenerator.generate(spec, "com.pets")
             fileSpecs.size shouldBe 4
 
-            val expectedPetController = FileUtils.getFile("src", "test-res", "codegen", "expected-pet-controller").readText()
-            val expectedStoreController = FileUtils.getFile("src", "test-res", "codegen", "expected-store-controller").readText()
+            val expectedPetApi = FileUtils.getFile("src", "test-res", "codegen", "expected-pet-api").readText()
+            val expectedStoreApi = FileUtils.getFile("src", "test-res", "codegen", "expected-store-api").readText()
             val expectedModels = FileUtils.getFile("src", "test-res", "codegen", "expected-models").readText()
             val expectedResponseModel = FileUtils.getFile("src", "test-res", "codegen", "expected-response-model").readText()
-            fileSpecs[0].toString() shouldBe expectedPetController
-            fileSpecs[1].toString() shouldBe expectedStoreController
+            fileSpecs[0].toString() shouldBe expectedPetApi
+            fileSpecs[1].toString() shouldBe expectedStoreApi
             fileSpecs[2].toString() shouldBe expectedModels
             fileSpecs[3].toString() shouldBe expectedResponseModel
         }

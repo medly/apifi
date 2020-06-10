@@ -16,8 +16,8 @@ import kotlin.Array
 import kotlin.String
 
 @Controller
-class PetsController @Inject constructor(
-  private val service: PetsService
+class PetsApi @Inject constructor(
+  private val controller: PetsController
 ) {
   @Post(value = "/pets")
   @Consumes("application/json")
@@ -29,7 +29,7 @@ class PetsController @Inject constructor(
       HttpResponse.ok(service.showPetById(petId))
 }
 
-interface PetsService {
+interface PetsController {
   fun createPets(body: Array<Pet>): Error
 
   fun showPetById(petId: String): Pet

@@ -5,9 +5,9 @@ import apifi.parser.models.ParamType
 import apifi.parser.models.Path
 import com.squareup.kotlinpoet.*
 
-object ServiceBuilder {
+object ControllerInterfaceBuilder {
     fun build(paths: List<Path>, baseName: String): TypeSpec {
-        val serviceMethods = paths.flatMap { path ->
+        val controllerMethods = paths.flatMap { path ->
             path.operations?.map { operation ->
                 val queryParams = operation.params?.filter { it.type == ParamType.Query } ?: emptyList()
                 val pathParams = operation.params?.filter { it.type == ParamType.Path } ?: emptyList()
@@ -30,7 +30,7 @@ object ServiceBuilder {
             } ?: emptyList()
         }
 
-        return TypeSpec.interfaceBuilder("${baseName}Service")
-                .addFunctions(serviceMethods).build()
+        return TypeSpec.interfaceBuilder("${baseName}Controller")
+                .addFunctions(controllerMethods).build()
     }
 }
