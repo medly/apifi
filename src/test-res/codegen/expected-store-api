@@ -15,7 +15,7 @@ class StoreApi @Inject constructor(
 ) {
   @Get(value = "/store/inventory")
   fun get(httpRequest: HttpRequest<Any>): HttpResponse<Array<GetStoreInventoryResponse>> =
-      HttpResponse.ok(service.get())
+      HttpResponse.ok(controller.get())
 }
 
 interface StoreController {

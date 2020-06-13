@@ -22,11 +22,11 @@ class PetsApi @Inject constructor(
   @Post(value = "/pets")
   @Consumes("application/json")
   fun createPets(@Body body: Array<Pet>, httpRequest: HttpRequest<Any>): HttpResponse<Error> =
-      HttpResponse.ok(service.createPets(body))
+      HttpResponse.ok(controller.createPets(body))
 
   @Get(value = "/pets/{petId}")
   fun showPetById(@PathVariable petId: String, httpRequest: HttpRequest<Any>): HttpResponse<Pet> =
-      HttpResponse.ok(service.showPetById(petId))
+      HttpResponse.ok(controller.showPetById(petId))
 }
 
 interface PetsController {

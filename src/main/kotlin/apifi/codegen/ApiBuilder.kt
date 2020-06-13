@@ -90,7 +90,7 @@ object ApiBuilder {
         val requestParamNames = operation.request?.let { req ->
             if (req.consumes?.contains("multipart/form-data") == true) "java.io.File.createTempFile(body.filename, \"\").also { it.writeBytes(body.bytes) }" else requestBodyParams.joinToString { it.name }
         }?.let { listOf(it) } ?: emptyList()
-        return "HttpResponse.ok(service.${operation.name}(${(queryParamNames + pathParamNames + requestParamNames).joinToString()}))"
+        return "HttpResponse.ok(controller.${operation.name}(${(queryParamNames + pathParamNames + requestParamNames).joinToString()}))"
     }
 
 }
