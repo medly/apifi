@@ -1,6 +1,5 @@
 package apifi.codegen
 
-import apifi.helpers.toCamelCase
 import apifi.helpers.toKotlinPoetType
 import apifi.helpers.toTitleCase
 import apifi.parser.models.Operation
@@ -11,7 +10,9 @@ import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 
 object ApiBuilder {
 
-    fun build(name: String, paths: List<Path>, securityDependencies: List<SecurityDependency>, basePackageName: String, modelMapping: List<Pair<String, String>>): FileSpec {
+    private const val micronautHttpAnnotation = "io.micronaut.http.annotation"
+
+    fun build(name: String, paths: List<Path>, basePackageName: String, modelMapping: List<Pair<String, String>>): FileSpec {
         val baseName = toTitleCase(name)
         val controllerClassName = "${baseName}Api"
 
@@ -24,27 +25,19 @@ object ApiBuilder {
         val controllerProperty = PropertySpec.builder("controller", ClassName(basePackageName, controllerInterfaceClass.name!!))
                 .addModifiers(KModifier.PRIVATE).initializer("controller").build()
 
+
         val classSpec = TypeSpec.classBuilder(ClassName(basePackageName, controllerClassName))
-                .addAnnotation(AnnotationSpec.builder(ClassName("io.micronaut.http.annotation", "Controller"))
+                .addAnnotation(AnnotationSpec.builder(ClassName(micronautHttpAnnotation, "Controller"))
                         .build())
                 .addProperty(controllerProperty)
-                .addFunctions(generateOperationFunctions(paths, modelMapping, securityDependencies))
-
-        securityDependencies.forEach { dependency ->
-            primaryConstructor.addParameter(
-                    ParameterSpec.builder(toCamelCase(dependency.name), ClassName(dependency.packageName, dependency.name)).build()
-            )
-
-            classSpec.addProperty(PropertySpec.builder(toCamelCase(dependency.name), ClassName(dependency.packageName, dependency.name))
-                    .addModifiers(KModifier.PRIVATE).initializer(toCamelCase(dependency.name)).build())
-        }
+                .addFunctions(generateOperationFunctions(paths, basePackageName, modelMapping))
 
         classSpec.primaryConstructor(primaryConstructor.build())
 
         return FileSpec.builder(basePackageName, "$controllerClassName.kt").addType(classSpec.build()).addType(controllerInterfaceClass).build()
     }
 
-    private fun generateOperationFunctions(paths: List<Path>, modelMapping: List<Pair<String, String>>, securityDependencies: List<SecurityDependency>): List<FunSpec> {
+    private fun generateOperationFunctions(paths: List<Path>, basePackageName: String, modelMapping: List<Pair<String, String>>): List<FunSpec> {
         return paths.flatMap { path ->
             path.operations?.map { operation ->
                 val queryParams = operation.params?.filter { it.type == ParamType.Query }?.map(QueryParamBuilder::build)
@@ -58,29 +51,36 @@ object ApiBuilder {
 
                 val serviceCallStatement = serviceCallStatement(operation, queryParams, pathParams, requestBodyParams)
 
-                val httpRequestParam = ParameterSpec.builder("httpRequest",
-                        ClassName("io.micronaut.http", "HttpRequest").parameterizedBy(Any::class.asClassName()))
-                        .build()
-                val responseType = operation.response?.firstOrNull()?.let { ClassName("io.micronaut.http", "HttpResponse").parameterizedBy(it.toKotlinPoetType(modelMapping)) }
+                val responseType = operation.response?.firstOrNull { it.defaultOrStatus == "200" || it.defaultOrStatus == "201" }?.let { ClassName("io.micronaut.http", "HttpResponse").parameterizedBy(it.type.toKotlinPoetType(modelMapping)) }
+
+                val non2xxStatusResponseFromOperation = operation.response?.filter { it.defaultOrStatus != "default" && it.defaultOrStatus != "200" && it.defaultOrStatus != "201" }?.map { it.defaultOrStatus.toInt() }
+
+                val exceptionClassesForNon2xxResponses = non2xxStatusResponseFromOperation?.let { Non200ResponseHandler.getExceptionClassFor(it) }
+
+                val exceptionAnnotations = exceptionClassesForNon2xxResponses?.map { exceptionClass ->
+                    AnnotationSpec.builder(Throws::class)
+                            .addMember("%T::class", ClassName("$basePackageName.exceptions", exceptionClass))
+                            .build()}
+
                 FunSpec.builder(operation.name)
+                        .also { b -> exceptionAnnotations?.let { b.addAnnotations(it) } }
                         .addAnnotation(operationTypeAnnotation(operation, path))
                         .also { b -> operation.request?.consumes?.let { consumes -> b.addAnnotation(operationContentTypeAnnotation(consumes)) } }
                         .addParameters(queryParams + pathParams + headerParams + requestBodyParams)
-                        .addParameter(httpRequestParam)
                         .also { responseType?.let { res -> it.returns(res) } }
-                        .addStatement(if (securityDependencies.isNotEmpty()) "return basicauthorizer.authorize(httpRequest.headers.authorization){$serviceCallStatement}" else "return $serviceCallStatement")
+                        .addStatement("return $serviceCallStatement")
                         .build()
             } ?: emptyList()
         }
     }
 
     private fun operationTypeAnnotation(operation: Operation, path: Path) =
-            AnnotationSpec.builder(ClassName("io.micronaut.http.annotation", toTitleCase(operation.type.toString())))
+            AnnotationSpec.builder(ClassName(micronautHttpAnnotation, toTitleCase(operation.type.toString())))
                     .addMember("value = %S", path.url)
                     .build()
 
     private fun operationContentTypeAnnotation(consumes: List<String>) =
-            AnnotationSpec.builder(ClassName("io.micronaut.http.annotation", "Consumes"))
+            AnnotationSpec.builder(ClassName(micronautHttpAnnotation, "Consumes"))
                     .also { ab -> consumes.forEach { ab.addMember("%S", it) } }
                     .build()
 
@@ -92,5 +92,6 @@ object ApiBuilder {
         }?.let { listOf(it) } ?: emptyList()
         return "HttpResponse.ok(controller.${operation.name}(${(queryParamNames + pathParamNames + requestParamNames).joinToString()}))"
     }
+
 
 }

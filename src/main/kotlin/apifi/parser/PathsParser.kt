@@ -20,8 +20,8 @@ object PathsParser {
                 val responses = ResponseBodyParser.parse(operation.responses, operationSpecifier)
                 models.addAll(request?.second ?: emptyList())
                 models.addAll(responses?.second ?: emptyList())
-                Operation(httpMethod, operation.operationId
-                        ?: toCamelCase(httpMethod.toString()), operation.tags, params, request?.first, responses?.first)
+                Operation(httpMethod, operation.operationId ?: toCamelCase(httpMethod.toString()),
+                        operation.tags, params, request?.first, responses?.first)
             }
             Path(endpoint, operations)
         } ?: emptyList()) to models

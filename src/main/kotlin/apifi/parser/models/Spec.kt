@@ -2,6 +2,7 @@ package apifi.parser.models
 
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.security.SecurityScheme
+import org.apache.http.HttpStatus
 
 data class Spec(val paths: List<Path>, val models: List<Model>, val securityRequirements: List<String>, val securityDefinitions: List<SecurityDefinition>)
 
@@ -13,9 +14,15 @@ data class Operation(
         val tags: List<String>?,
         val params: List<Param>?,
         val request: Request?,
-        val response: List<String>?,
+        val response: List<Response>?,
         val securitySchemeType: SecurityDefinitionType = SecurityDefinitionType.BASIC_AUTH
 )
+
+data class Response(
+        val defaultOrStatus: String,
+        val type: String
+)
+
 
 data class Request(
         val type: String,

@@ -2,6 +2,7 @@ package apifi.parser
 
 import apifi.parser.models.Model
 import apifi.parser.models.Property
+import apifi.parser.models.Response
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 import io.swagger.v3.parser.OpenAPIV3Parser
@@ -14,7 +15,7 @@ class ResponseBodyParserTest : DescribeSpec({
             val file = FileUtils.getFile("src", "test-res", "parser", "models", "with-separate-schema.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
             val response = ResponseBodyParser.parse(openApi.paths["/pets/{petId}"]?.get?.responses, "showByPetId")
-            response?.first shouldBe listOf("Pet", "Error")
+            response?.first shouldBe listOf(Response("200", "Pet"), Response("default", "Error"))
             response?.second shouldBe emptyList()
         }
 
@@ -22,13 +23,21 @@ class ResponseBodyParserTest : DescribeSpec({
             val file = FileUtils.getFile("src", "test-res", "parser", "models", "with-inline-request-response-schema.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
             val response = ResponseBodyParser.parse(openApi.paths["/pets"]?.post?.responses, "showByPetId")
-            response?.first shouldBe listOf("ShowByPetIdResponse")
+            response?.first shouldBe listOf(Response("default","ShowByPetIdResponse"))
             response?.second shouldBe listOf(
                     Model("ShowByPetIdResponse", listOf(
                             Property("code", "kotlin.Int", false),
                             Property("message", "kotlin.String", false)
                     ))
             )
+        }
+
+        it("should parse response types for non-200 responses also") {
+            val file = FileUtils.getFile("src", "test-res", "parser", "models", "with-non-200-responses.yml").readText().trimIndent()
+            val openApi = OpenAPIV3Parser().readContents(file).openAPI
+            val response = ResponseBodyParser.parse(openApi.paths["/pets/{petId}"]?.get?.responses, "showByPetId")
+            response?.first shouldBe listOf(Response("200", "PetResponse"), Response("400", "kotlin.String"), Response("default", "Error"))
+            response?.second shouldBe emptyList()
         }
     }
 })

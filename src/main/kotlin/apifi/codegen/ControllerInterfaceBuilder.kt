@@ -25,7 +25,7 @@ object ControllerInterfaceBuilder {
                         .addModifiers(KModifier.ABSTRACT)
                         .addParameters(params)
                         .also { requestBodyParam?.let { req -> it.addParameter(req) } }
-                        .also { (operation.response?.firstOrNull()?.let { res -> it.returns(res.toKotlinPoetType()) }) }
+                        .also { (operation.response?.firstOrNull()?.let { res -> it.returns(res.type.toKotlinPoetType()) }) }
                         .build()
             } ?: emptyList()
         }

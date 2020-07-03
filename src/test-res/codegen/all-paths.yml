@@ -23,8 +23,12 @@ paths:
                 $ref: '#/components/schemas/Pet'
         required: true
       responses:
-        '201':
+        '200':
           description: Null response
+          content:
+            text/plain:
+              schema:
+                type: string
         default:
           description: unexpected error
           content:
@@ -51,6 +55,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Pet"
+        '400':
+          description: Expected response to a valid request
+          content:
+            text/plain:
+              schema:
+                type: string
         default:
           description: unexpected error
           content:

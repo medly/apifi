@@ -28,7 +28,7 @@ class ControllerInterfaceBuilderTest : DescribeSpec({
             val headerParam = Param("x-header", "kotlin.String", true, ParamType.Header)
 
             val path = Path("/pets", listOf(
-                    Operation(PathItem.HttpMethod.GET, "opName", emptyList(), listOf(queryParam, pathParam, headerParam), Request("Pet", listOf("application/json")), listOf("PetResponse"), SecurityDefinitionType.BASIC_AUTH)
+                    Operation(PathItem.HttpMethod.GET, "opName", emptyList(), listOf(queryParam, pathParam, headerParam), Request("Pet", listOf("application/json")), listOf(Response("200", "PetResponse")), SecurityDefinitionType.BASIC_AUTH)
             ))
             val controllerInterface = ControllerInterfaceBuilder.build(listOf(path), "Pets")
 
@@ -42,7 +42,7 @@ class ControllerInterfaceBuilderTest : DescribeSpec({
             val headerParam = Param("x-header", "kotlin.String", true, ParamType.Header)
 
             val path = Path("/pets", listOf(
-                    Operation(PathItem.HttpMethod.GET, "opName", emptyList(), listOf(queryParam, pathParam, headerParam), Request("io.micronaut.http.multipart.CompleteFileUpload", listOf("multipart/form-data")), listOf("PetResponse"), SecurityDefinitionType.BASIC_AUTH)
+                    Operation(PathItem.HttpMethod.GET, "opName", emptyList(), listOf(queryParam, pathParam, headerParam), Request("io.micronaut.http.multipart.CompleteFileUpload", listOf("multipart/form-data")), listOf(Response("200", "PetResponse")), SecurityDefinitionType.BASIC_AUTH)
             ))
             val controllerInterface = ControllerInterfaceBuilder.build(listOf(path), "Pets")
 

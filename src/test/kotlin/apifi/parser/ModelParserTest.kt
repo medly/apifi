@@ -32,7 +32,7 @@ class ModelParserTest: DescribeSpec({
             )))
         }
 
-        it("should parse model from schema which refers to another model shcema") {
+        it("should parse model from schema which refers to another model schema") {
             val file = FileUtils.getFile("src", "test-res", "parser", "models", "with-cross-reference-schema.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
             val models = openApi.components.schemas.map { ModelParser.modelsFromSchema(it.key, it.value) }
