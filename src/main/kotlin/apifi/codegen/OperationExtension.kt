@@ -22,6 +22,6 @@ fun Operation.requestParams(modelMapping: Map<String, String>) = request?.let {
             .build())
 } ?: emptyList()
 
-fun Operation.returnType(modelMapping: Map<String, String>) = response
+fun Operation.returnType(modelMapping: Map<String, String>) = responses
 		?.firstOrNull { it.defaultOrStatus == "200" || it.defaultOrStatus == "201" }
         ?.let { ClassName("io.micronaut.http", "HttpResponse").parameterizedBy(it.type.toKotlinPoetType(modelMapping)) }

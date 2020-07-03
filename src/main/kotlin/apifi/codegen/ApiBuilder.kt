@@ -23,7 +23,6 @@ object ApiBuilder {
         val controllerProperty = PropertySpec.builder("controller", ClassName(basePackageName, controllerInterfaceClass.name!!))
                 .addModifiers(KModifier.PRIVATE).initializer("controller").build()
 
-
         val classSpec = TypeSpec.classBuilder(ClassName(basePackageName, controllerClassName))
                 .addAnnotation(AnnotationSpec.builder(ClassName(micronautHttpAnnotation, "Controller"))
                         .build())
@@ -40,7 +39,7 @@ object ApiBuilder {
             path.operations?.map { operation ->
                 val serviceCallStatement = controllerCallStatement(operation, modelMapping)
                 FunSpec.builder(operation.name)
-                        .also { b -> operation.response?.let { b.addAnnotations(operationExceptionAnnotations(it, basePackageName)) } }
+                        .also { b -> operation.responses?.let { b.addAnnotations(operationExceptionAnnotations(it, basePackageName)) } }
                         .addAnnotation(operationTypeAnnotation(operation, path))
                         .also { b -> operation.request?.consumes?.let { consumes -> b.addAnnotation(operationContentTypeAnnotation(consumes)) } }
                         .addParameters(operation.queryParams() + operation.pathParams() + operation.headerParams() + operation.requestParams(modelMapping))
