@@ -1,5 +1,6 @@
 package apifi.codegen
 
+import apifi.codegen.exceptions.Non200ResponseHandler
 import apifi.models.Spec
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.TypeSpec

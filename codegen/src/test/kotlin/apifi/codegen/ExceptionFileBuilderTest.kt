@@ -1,5 +1,7 @@
 package apifi.codegen
 
+import apifi.codegen.exceptions.ExceptionDetailsHolder
+import apifi.codegen.exceptions.ExceptionFileBuilder
 import com.squareup.kotlinpoet.TypeSpec
 import io.kotlintest.matchers.collections.shouldNotContainInOrder
 import io.kotlintest.matchers.string.shouldContain

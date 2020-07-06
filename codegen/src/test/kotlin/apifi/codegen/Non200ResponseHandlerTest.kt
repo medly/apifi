@@ -1,5 +1,6 @@
 package apifi.codegen
 
+import apifi.codegen.exceptions.Non200ResponseHandler
 import io.kotlintest.specs.StringSpec
 import io.kotlintest.shouldBe
 

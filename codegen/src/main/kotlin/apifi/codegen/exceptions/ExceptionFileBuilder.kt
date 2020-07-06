@@ -1,5 +1,6 @@
-package apifi.codegen
+package apifi.codegen.exceptions
 
+import apifi.codegen.exceptions.ExceptionDetailsHolder
 import apifi.helpers.toKotlinPoetType
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy

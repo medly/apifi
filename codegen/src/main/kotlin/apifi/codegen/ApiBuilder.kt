@@ -1,5 +1,6 @@
 package apifi.codegen
 
+import apifi.codegen.exceptions.Non200ResponseHandler
 import apifi.helpers.toTitleCase
 import apifi.models.Operation
 import apifi.models.Path
