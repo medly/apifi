@@ -2,7 +2,6 @@ package apifi.parser.models
 
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.security.SecurityScheme
-import org.apache.http.HttpStatus
 
 data class Spec(val paths: List<Path>, val models: List<Model>, val securityRequirements: List<String>, val securityDefinitions: List<SecurityDefinition>)
 
