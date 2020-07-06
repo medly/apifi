@@ -1,8 +1,8 @@
 package apifi.parser
 
-import apifi.parser.models.Model
-import apifi.parser.models.Property
-import apifi.parser.models.Request
+import apifi.models.Model
+import apifi.models.Property
+import apifi.models.Request
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 import io.swagger.v3.parser.OpenAPIV3Parser

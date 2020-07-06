@@ -1,9 +1,9 @@
 package apifi.codegen
 
 import apifi.helpers.toTitleCase
-import apifi.parser.models.Operation
-import apifi.parser.models.Path
-import apifi.parser.models.Response
+import apifi.models.Operation
+import apifi.models.Path
+import apifi.models.Response
 import com.squareup.kotlinpoet.*
 
 object ApiBuilder {

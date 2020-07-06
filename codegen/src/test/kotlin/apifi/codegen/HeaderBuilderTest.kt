@@ -1,7 +1,7 @@
 package apifi.codegen
 
-import apifi.parser.models.Param
-import apifi.parser.models.ParamType
+import apifi.models.Param
+import apifi.models.ParamType
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 

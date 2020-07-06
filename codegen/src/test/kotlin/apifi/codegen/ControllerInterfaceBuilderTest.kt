@@ -1,6 +1,6 @@
 package apifi.codegen
 
-import apifi.parser.models.*
+import apifi.models.*
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 import io.swagger.v3.oas.models.PathItem

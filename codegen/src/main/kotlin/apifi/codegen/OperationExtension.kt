@@ -1,8 +1,8 @@
 package apifi.codegen
 
 import apifi.helpers.toKotlinPoetType
-import apifi.parser.models.Operation
-import apifi.parser.models.ParamType
+import apifi.models.Operation
+import apifi.models.ParamType
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy

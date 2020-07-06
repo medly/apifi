@@ -1,6 +1,7 @@
 package apifi.codegen
 
-import apifi.parser.models.*
+import apifi.models.Model
+import apifi.models.Property
 import com.squareup.kotlinpoet.TypeSpec
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec

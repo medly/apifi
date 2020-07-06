@@ -1,7 +1,7 @@
 package apifi.parser
 
-import apifi.parser.models.Model
-import apifi.parser.models.Property
+import apifi.models.Model
+import apifi.models.Property
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 import io.swagger.v3.parser.OpenAPIV3Parser
@@ -45,7 +45,7 @@ class ModelParserTest: DescribeSpec({
                             Property("child", "Child", true),
                             Property("foodChoices", "kotlin.Array<FoodChoice>", true)
                     )
-            ))
+                    ))
             models[1] shouldBe listOf(Model("Child", listOf(
                     Property("name", "kotlin.String", false)
             )))

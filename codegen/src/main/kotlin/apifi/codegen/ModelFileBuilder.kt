@@ -1,7 +1,7 @@
 package apifi.codegen
 
 import apifi.helpers.toKotlinPoetType
-import apifi.parser.models.Model
+import apifi.models.Model
 import com.squareup.kotlinpoet.*
 
 object ModelFileBuilder {

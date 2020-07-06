@@ -1,8 +1,8 @@
 package apifi.parser
 
 import apifi.parser.ModelParser.parseReference
-import apifi.parser.models.Model
-import apifi.parser.models.Response
+import apifi.models.Model
+import apifi.models.Response
 import io.swagger.v3.oas.models.media.ArraySchema
 import io.swagger.v3.oas.models.media.Schema
 import io.swagger.v3.oas.models.responses.ApiResponses

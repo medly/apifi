@@ -1,4 +1,4 @@
-package apifi.parser.models
+package apifi.models
 
 data class Model(
         val name: String,

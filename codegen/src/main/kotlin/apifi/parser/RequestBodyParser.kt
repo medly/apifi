@@ -2,8 +2,8 @@ package apifi.parser
 
 import apifi.parser.ModelParser.parseReference
 import apifi.parser.ModelParser.shouldCreateModel
-import apifi.parser.models.Model
-import apifi.parser.models.Request
+import apifi.models.Model
+import apifi.models.Request
 import io.swagger.v3.oas.models.media.ArraySchema
 import io.swagger.v3.oas.models.media.Schema
 import io.swagger.v3.oas.models.parameters.RequestBody

@@ -1,8 +1,8 @@
 package apifi.codegen
 
 import apifi.helpers.toKotlinPoetType
-import apifi.parser.models.ParamType
-import apifi.parser.models.Path
+import apifi.models.ParamType
+import apifi.models.Path
 import com.squareup.kotlinpoet.*
 
 object ControllerInterfaceBuilder {

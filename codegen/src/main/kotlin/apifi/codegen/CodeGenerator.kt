@@ -1,6 +1,6 @@
 package apifi.codegen
 
-import apifi.parser.models.Spec
+import apifi.models.Spec
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.TypeSpec
 

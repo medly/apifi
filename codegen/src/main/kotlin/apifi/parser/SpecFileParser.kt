@@ -1,8 +1,8 @@
 package apifi.parser
 
-import apifi.parser.models.SecurityDefinition
-import apifi.parser.models.SecurityDefinitionType
-import apifi.parser.models.Spec
+import apifi.models.SecurityDefinition
+import apifi.models.SecurityDefinitionType
+import apifi.models.Spec
 import io.swagger.v3.oas.models.OpenAPI
 
 object SpecFileParser {

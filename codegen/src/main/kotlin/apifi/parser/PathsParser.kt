@@ -3,7 +3,7 @@ package apifi.parser
 import apifi.helpers.toCamelCase
 import apifi.helpers.toCodeGenModel
 import apifi.helpers.toTitleCase
-import apifi.parser.models.*
+import apifi.models.*
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.Paths
 
@@ -20,7 +20,8 @@ object PathsParser {
                 val responses = ResponseBodyParser.parse(operation.responses, operationSpecifier)
                 models.addAll(request?.second ?: emptyList())
                 models.addAll(responses?.second ?: emptyList())
-                Operation(httpMethod, operation.operationId ?: toCamelCase(httpMethod.toString()),
+                Operation(httpMethod, operation.operationId
+                        ?: toCamelCase(httpMethod.toString()),
                         operation.tags, params, request?.first, responses?.first)
             }
             Path(endpoint, operations)

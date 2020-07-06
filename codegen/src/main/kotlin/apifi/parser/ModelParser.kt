@@ -2,8 +2,8 @@ package apifi.parser
 
 import apifi.helpers.toCodeGenModel
 import apifi.helpers.toTitleCase
-import apifi.parser.models.Model
-import apifi.parser.models.Property
+import apifi.models.Model
+import apifi.models.Property
 import io.swagger.v3.oas.models.media.ArraySchema
 import io.swagger.v3.oas.models.media.ObjectSchema
 import io.swagger.v3.oas.models.media.Schema

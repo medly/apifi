@@ -1,4 +1,4 @@
-package apifi.parser.models
+package apifi.models
 
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.security.SecurityScheme

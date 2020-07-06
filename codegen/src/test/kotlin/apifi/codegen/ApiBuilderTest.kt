@@ -1,6 +1,6 @@
 package apifi.codegen
 
-import apifi.parser.models.*
+import apifi.models.*
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
 import io.kotlintest.matchers.collections.shouldContain
