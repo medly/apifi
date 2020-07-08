@@ -15,16 +15,16 @@ class RequestBodyParserTest : DescribeSpec({
             val file = FileUtils.getFile("src", "test-res", "parser", "models", "with-separate-schema.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
             val request = RequestBodyParser.parse(openApi.paths["/pets"]?.post?.requestBody, "showById")
-            request?.first shouldBe Request("kotlin.Array<Pet>", listOf("application/json"))
-            request?.second shouldBe emptyList()
+            request?.result shouldBe Request("kotlin.Array<Pet>", listOf("application/json"))
+            request?.models shouldBe emptyList()
         }
 
         it("should parse request body with inline body") {
             val file = FileUtils.getFile("src", "test-res", "parser", "models", "with-inline-request-response-schema.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
             val request = RequestBodyParser.parse(openApi.paths["/pets"]?.post?.requestBody, "showById")
-            request?.first shouldBe Request("kotlin.Array<ShowByIdRequest>", listOf("application/json"))
-            request?.second shouldBe listOf(
+            request?.result shouldBe Request("kotlin.Array<ShowByIdRequest>", listOf("application/json"))
+            request?.models shouldBe listOf(
                     Model("ShowByIdRequest", listOf(
                             Property("id", "kotlin.Long", false),
                             Property("name", "kotlin.String", false),
@@ -37,8 +37,8 @@ class RequestBodyParserTest : DescribeSpec({
             val file = FileUtils.getFile("src", "test-res", "parser", "request", "with-multipart-content-type.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
             val request = RequestBodyParser.parse(openApi.paths["/pet/{id}/uploadDoc"]?.post?.requestBody, "uploadDocument")
-            request?.first shouldBe Request("io.micronaut.http.multipart.CompleteFileUpload", listOf("multipart/form-data"))
-            request?.second shouldBe emptyList()
+            request?.result shouldBe Request("io.micronaut.http.multipart.CompleteFileUpload", listOf("multipart/form-data"))
+            request?.models shouldBe emptyList()
         }
     }
 })

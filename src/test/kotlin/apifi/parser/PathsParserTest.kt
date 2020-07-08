@@ -14,7 +14,7 @@ class PathsParserTest : DescribeSpec({
         it("with no params") {
             val file = FileUtils.getFile("src", "test-res", "parser", "params", "with-no-params.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
-            val path = PathsParser.parse(openApi.paths).first[0]
+            val path = PathsParser.parse(openApi.paths).result[0]
             path.url shouldBe "/pets"
             path.operations!![0].params shouldBe null
             path.operations!![0].type shouldBe HttpMethod.GET
@@ -24,7 +24,7 @@ class PathsParserTest : DescribeSpec({
         it("with query params") {
             val file = FileUtils.getFile("src", "test-res", "parser", "params", "with-query-params.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
-            val path = PathsParser.parse(openApi.paths).first[0]
+            val path = PathsParser.parse(openApi.paths).result[0]
             path.url shouldBe "/pets"
             path.operations!![0].type shouldBe HttpMethod.POST
             path.operations!![0].params!![0] shouldBe Param("limit", "kotlin.Int", false, ParamType.Query)
@@ -33,7 +33,7 @@ class PathsParserTest : DescribeSpec({
         it("with path params") {
             val file = FileUtils.getFile("src", "test-res", "parser", "params", "with-path-params.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
-            val path = PathsParser.parse(openApi.paths).first[0]
+            val path = PathsParser.parse(openApi.paths).result[0]
             path.url shouldBe "/pets/{petId}"
             path.operations!![0].type shouldBe HttpMethod.GET
             path.operations!![0].params!![0] shouldBe Param("petId", "kotlin.String", true, ParamType.Path)
@@ -42,7 +42,7 @@ class PathsParserTest : DescribeSpec({
         it("with headers") {
             val file = FileUtils.getFile("src", "test-res", "parser", "params", "with-header-params.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
-            val path = PathsParser.parse(openApi.paths).first[0]
+            val path = PathsParser.parse(openApi.paths).result[0]
             path.url shouldBe "/pets"
             path.operations!![0].type shouldBe HttpMethod.POST
             path.operations!![0].params!![0] shouldBe Param("x-header", "kotlin.String", true, ParamType.Header)
