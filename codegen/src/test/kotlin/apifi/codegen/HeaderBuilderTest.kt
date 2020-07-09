@@ -1,0 +1,20 @@
+package apifi.codegen
+
+import apifi.models.Param
+import apifi.models.ParamType
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.DescribeSpec
+
+class HeaderBuilderTest : DescribeSpec({
+    describe("HeaderBuilder") {
+        it("should return correct ParameterSpec for mandatory header param") {
+            val headerParam = Param("X-Foo", "String", true, ParamType.Path)
+            HeaderBuilder.build(headerParam).toString().trimIndent() shouldBe "@io.micronaut.http.annotation.Header(value = \"X-Foo\") xFoo: String"
+        }
+
+        it("should return correct ParameterSpec for optional header param") {
+            val queryParam = Param("X-Foo", "String", false, ParamType.Path)
+            HeaderBuilder.build(queryParam).toString().trimIndent() shouldBe "@io.micronaut.http.annotation.Header(value = \"X-Foo\") xFoo: String?"
+        }
+    }
+})
