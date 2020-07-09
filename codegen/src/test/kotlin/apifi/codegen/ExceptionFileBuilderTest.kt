@@ -24,9 +24,9 @@ class ExceptionFileBuilderTest : DescribeSpec( {
         it("should generate global exception handler for the exception class with exception's default message and status") {
             exceptionFileSpec.members[1].toString() shouldContain
                     "class GlobalSomeExceptionHandler : io.micronaut.http.server.exceptions.ExceptionHandler<com.abc.exceptions.SomeException, io.micronaut.http.HttpResponse<String>> {\n" +
-                    "  fun handle(request: io.micronaut.http.HttpRequest<Any>?, exception: com.abc.exceptions.SomeException?): io.micronaut.http.HttpResponse<String> {\n" +
-                    "    val msg = exception?.conversionError?.cause?.localizedMessage ?: \"Some error occurred\"\n" +
-                    "    HttpResponse.status<String>(HttpStatus.valueOf(123), msg)\n" +
+                    "  override fun handle(request: io.micronaut.http.HttpRequest<kotlin.Any>?, exception: com.abc.exceptions.SomeException?): io.micronaut.http.HttpResponse<String> {\n" +
+                    "    val msg = exception?.cause?.localizedMessage ?: \"Some error occurred\"\n" +
+                    "    return HttpResponse.status<String>(io.micronaut.http.HttpStatus.valueOf(123), msg)\n" +
                     "  }\n" +
                     "}"
         }
