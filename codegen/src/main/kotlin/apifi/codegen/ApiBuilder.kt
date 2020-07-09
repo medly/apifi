@@ -11,7 +11,7 @@ object ApiBuilder {
 
     private const val micronautHttpAnnotation = "io.micronaut.http.annotation"
 
-    fun build(name: String, paths: List<Path>, basePackageName: String, modelMapping: Map<String, String>): FileSpec {
+    fun build(name: String, paths: List<Path>, basePackageName: String, modelMapping: List<Pair<String, String>>): FileSpec {
         val baseName = toTitleCase(name)
         val controllerClassName = "${baseName}Api"
 
@@ -36,7 +36,7 @@ object ApiBuilder {
         return FileSpec.builder(basePackageName, "$controllerClassName.kt").addType(classSpec.build()).addType(controllerInterfaceClass).build()
     }
 
-    private fun generateOperationFunctions(paths: List<Path>, basePackageName: String, modelMapping: Map<String, String>): List<FunSpec> {
+    private fun generateOperationFunctions(paths: List<Path>, basePackageName: String, modelMapping: List<Pair<String, String>>): List<FunSpec> {
         return paths.flatMap { path ->
             path.operations?.map { operation ->
                 val serviceCallStatement = controllerCallStatement(operation, modelMapping)

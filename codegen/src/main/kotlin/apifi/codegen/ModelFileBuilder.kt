@@ -7,7 +7,7 @@ import com.squareup.kotlinpoet.*
 object ModelFileBuilder {
     fun build(models: List<Model>, basePackageName: String): FileSpec {
         val packageName = "$basePackageName.models"
-        val baseModelMapping = models.map { it.name to "$packageName.${it.name}" }.toMap()
+        val baseModelMapping = models.map { it.name to "$packageName.${it.name}" }
         val builder = FileSpec.builder(packageName, "Models.kt")
         models.forEach { model ->
             builder.addType(
