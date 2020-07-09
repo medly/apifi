@@ -3,8 +3,8 @@ package apifi.parser
 import apifi.models.Model
 import apifi.models.Property
 import apifi.models.Request
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.DescribeSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.DescribeSpec
 import io.swagger.v3.parser.OpenAPIV3Parser
 import org.apache.commons.io.FileUtils
 

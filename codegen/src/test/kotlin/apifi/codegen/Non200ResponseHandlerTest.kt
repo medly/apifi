@@ -1,8 +1,8 @@
 package apifi.codegen
 
 import apifi.codegen.exceptions.Non200ResponseHandler
-import io.kotlintest.specs.StringSpec
-import io.kotlintest.shouldBe
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 
 class Non200ResponseHandlerTest : StringSpec() {
 

@@ -8,3 +8,6 @@ out
 
 # Ignore mac specific directories
 .DS_Store
+
+#Ignore .kotlintest specific directory which lists test failures
+**/.kotlintest/

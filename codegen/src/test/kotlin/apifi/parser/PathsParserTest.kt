@@ -2,8 +2,8 @@ package apifi.parser
 
 import apifi.models.Param
 import apifi.models.ParamType
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.DescribeSpec
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.shouldBe
 import io.swagger.v3.oas.models.PathItem.HttpMethod
 import io.swagger.v3.parser.OpenAPIV3Parser
 import org.apache.commons.io.FileUtils

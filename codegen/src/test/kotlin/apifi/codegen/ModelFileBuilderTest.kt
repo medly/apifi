@@ -3,8 +3,8 @@ package apifi.codegen
 import apifi.models.Model
 import apifi.models.Property
 import com.squareup.kotlinpoet.TypeSpec
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.DescribeSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.DescribeSpec
 
 class ModelFileBuilderTest : DescribeSpec({
 

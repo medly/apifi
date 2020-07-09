@@ -3,11 +3,11 @@ package apifi.codegen
 import apifi.models.*
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
-import io.kotlintest.matchers.collections.shouldContain
-import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotlintest.matchers.string.shouldContain
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.DescribeSpec
+import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.DescribeSpec
 import io.swagger.v3.oas.models.PathItem
 
 class ApiBuilderTest : DescribeSpec({

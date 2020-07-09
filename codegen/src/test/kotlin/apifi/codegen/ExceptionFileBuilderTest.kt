@@ -3,10 +3,10 @@ package apifi.codegen
 import apifi.codegen.exceptions.ExceptionDetailsHolder
 import apifi.codegen.exceptions.ExceptionFileBuilder
 import com.squareup.kotlinpoet.TypeSpec
-import io.kotlintest.matchers.collections.shouldNotContainInOrder
-import io.kotlintest.matchers.string.shouldContain
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.DescribeSpec
+import io.kotest.matchers.collections.shouldNotContainInOrder
+import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.DescribeSpec
 
 class ExceptionFileBuilderTest : DescribeSpec( {
 

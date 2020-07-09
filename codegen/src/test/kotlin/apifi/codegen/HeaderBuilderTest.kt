@@ -2,8 +2,8 @@ package apifi.codegen
 
 import apifi.models.Param
 import apifi.models.ParamType
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.DescribeSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.DescribeSpec
 
 class HeaderBuilderTest : DescribeSpec({
     describe("HeaderBuilder") {

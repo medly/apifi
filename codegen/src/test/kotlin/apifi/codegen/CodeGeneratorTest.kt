@@ -1,9 +1,9 @@
 package apifi.codegen
 
 import apifi.parser.SpecFileParser
-import io.kotlintest.matchers.collections.shouldNotContainInOrder
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.DescribeSpec
+import io.kotest.matchers.collections.shouldNotContainInOrder
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.DescribeSpec
 import io.swagger.v3.parser.OpenAPIV3Parser
 import org.apache.commons.io.FileUtils
 

@@ -1,7 +1,7 @@
 package apifi.parser
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.DescribeSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.DescribeSpec
 import io.swagger.v3.parser.OpenAPIV3Parser
 import org.apache.commons.io.FileUtils
 

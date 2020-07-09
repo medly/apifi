@@ -1,7 +1,7 @@
 package apifi.codegen
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.DescribeSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.DescribeSpec
 
 class RequestBodyBuilderTest : DescribeSpec( {
 
