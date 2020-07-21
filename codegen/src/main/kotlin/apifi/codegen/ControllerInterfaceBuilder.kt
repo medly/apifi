@@ -1,8 +1,8 @@
 package apifi.codegen
 
 import apifi.helpers.toKotlinPoetType
-import apifi.models.ParamType
-import apifi.models.Path
+import apifi.parser.models.ParamType
+import apifi.parser.models.Path
 import com.squareup.kotlinpoet.*
 
 object ControllerInterfaceBuilder {
@@ -25,7 +25,7 @@ object ControllerInterfaceBuilder {
                         .addModifiers(KModifier.ABSTRACT)
                         .addParameters(params)
                         .also { requestBodyParam?.let { req -> it.addParameter(req) } }
-                        .also { (operation.response?.firstOrNull()?.let { res -> it.returns(res.type.toKotlinPoetType()) }) }
+                        .also { (operation.responses?.firstOrNull()?.let { res -> it.returns(res.type.toKotlinPoetType()) }) }
                         .build()
             } ?: emptyList()
         }

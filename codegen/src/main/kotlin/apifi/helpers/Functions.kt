@@ -15,10 +15,10 @@ fun toCamelCase(s: String): String = CaseUtils.toCamelCase(s, false, '_', '-', '
 fun <T> Schema<T>.toCodeGenModel(name: String): CodegenModel = KotlinClientCodegen().fromModel(name, this, null)
 fun <T> Schema<T>.toCodeGenModel(): CodegenModel = this.toCodeGenModel("any")
 
-fun String.toKotlinPoetType(): TypeName = toKotlinPoetType(emptyList())
+fun String.toKotlinPoetType(): TypeName = toKotlinPoetType(emptyMap())
 
-fun String.toKotlinPoetType(packageNameMapping: List<Pair<String, String>>): TypeName {
-    val withPackage = { name: String -> ClassName.bestGuess(packageNameMapping.find { name == it.first }?.second ?: name) }
+fun String.toKotlinPoetType(packageNameMapping: Map<String, String>): TypeName {
+    val withPackage = { name: String -> ClassName.bestGuess(packageNameMapping[name] ?: name) }
     return if (this.contains("<")) {
         val parts = this.split('<')
         val primaryType = parts[0]

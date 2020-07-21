@@ -1,13 +1,13 @@
 package apifi.codegen
 
-import apifi.models.*
+import apifi.parser.models.*
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
+import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContain
-import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.string.shouldContain
 import io.swagger.v3.oas.models.PathItem
 
 class ApiBuilderTest : DescribeSpec({
@@ -111,15 +111,6 @@ class ApiBuilderTest : DescribeSpec({
                     ")"
         }
 
-        it("should convert multipart file to java file") {
-            val operation = Operation(PathItem.HttpMethod.POST, "uploadDocument", emptyList(), emptyList(), Request("io.micronaut.http.multipart.CompleteFileUpload", listOf("multipart/form-data")), null)
-
-            val api = ApiBuilder.build("pets", listOf(Path("/pets", listOf(operation))), "apifi.gen", modelMapping())
-
-            val apiClass = api.members[0] as TypeSpec
-            apiClass.funSpecs[0].body.toString().trimIndent() shouldBe "return HttpResponse.ok(controller.uploadDocument(java.io.File.createTempFile(body.filename, \"\").also { it.writeBytes(body.bytes) }))"
-        }
-
         it("should add @throws annotation for all non 200 responses returned from an operation") {
             val request = Request("Pet", listOf("application/json", "text/plain"))
             val responses = listOf(Response("200", "PetResponse"), Response("400", "kotlin.String"), Response("403", "kotlin.String"))
@@ -147,4 +138,4 @@ class ApiBuilderTest : DescribeSpec({
 
 })
 
-fun modelMapping() = listOf("Pet" to "models.Pet", "PetResponse" to "models.PetResponse")
+fun modelMapping() = mapOf("Pet" to "models.Pet", "PetResponse" to "models.PetResponse")

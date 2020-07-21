@@ -1,6 +1,6 @@
 package apifi.codegen
 
-import apifi.models.Param
+import apifi.parser.models.Param
 import apifi.helpers.toCamelCase
 import apifi.helpers.toKotlinPoetType
 import com.squareup.kotlinpoet.AnnotationSpec

@@ -1,7 +1,7 @@
 package apifi.codegen
 
 import apifi.helpers.toKotlinPoetType
-import apifi.models.Param
+import apifi.parser.models.Param
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ParameterSpec
 
