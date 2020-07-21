@@ -5,8 +5,8 @@ import apifi.parser.models.SecurityDefinitionType
 import apifi.parser.models.Spec
 import io.swagger.v3.oas.models.OpenAPI
 
-object SpecFileParser {
-    fun parse(openApiSpec: OpenAPI): Spec {
+class OpenApiSpecReader {
+    fun read(openApiSpec: OpenAPI): Spec {
         val paths = PathsParser.parse(openApiSpec.paths)
         val models = (openApiSpec.components?.schemas?.flatMap { (name, schema) -> ModelParser.modelsFromSchema(name, schema) }
                 ?: emptyList()) + paths.models

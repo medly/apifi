@@ -1,6 +1,6 @@
 package apifi.codegen
 
-import apifi.parser.SpecFileParser
+import apifi.parser.OpenApiSpecReader
 import io.kotest.matchers.collections.shouldNotContainInOrder
 import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.DescribeSpec
@@ -13,8 +13,8 @@ class CodeGeneratorTest : DescribeSpec({
         it("should generate files according to spec") {
             val file = FileUtils.getFile("src", "test-res", "codegen", "all-paths.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
-            val spec = SpecFileParser.parse(openApi)
-            val fileSpecs = CodeGenerator.generate(spec, "com.pets")
+            val spec = OpenApiSpecReader().read(openApi)
+            val fileSpecs = CodeGenerator().generate(spec, "com.pets")
             fileSpecs.size shouldBe 8
 
             val expectedPetApi = FileUtils.getFile("src", "test-res", "codegen", "expected-pet-api").readText()
