@@ -1,7 +1,7 @@
 package apifi.codegen
 
-import apifi.codegen.exceptions.Non200ResponseHandler
 import apifi.helpers.toTitleCase
+import apifi.micronaut.exceptions.HttpStatusToExceptionClassMapper
 import apifi.parser.models.Operation
 import apifi.parser.models.Path
 import apifi.parser.models.Response
@@ -28,19 +28,19 @@ object ApiBuilder {
                 .addAnnotation(AnnotationSpec.builder(ClassName(micronautHttpAnnotation, "Controller"))
                         .build())
                 .addProperty(controllerProperty)
-                .addFunctions(generateOperationFunctions(paths, basePackageName, modelMapping))
+                .addFunctions(generateOperationFunctions(paths, modelMapping))
 
         classSpec.primaryConstructor(primaryConstructor.build())
 
         return FileSpec.builder(basePackageName, "$controllerClassName.kt").addType(classSpec.build()).addType(controllerInterfaceClass).build()
     }
 
-    private fun generateOperationFunctions(paths: List<Path>, basePackageName: String, modelMapping: Map<String, String>): List<FunSpec> {
+    private fun generateOperationFunctions(paths: List<Path>, modelMapping: Map<String, String>): List<FunSpec> {
         return paths.flatMap { path ->
             path.operations?.map { operation ->
                 val serviceCallStatement = controllerCallStatement(operation, modelMapping)
                 FunSpec.builder(operation.name)
-                        .also { b -> operation.responses?.let { b.addAnnotations(operationExceptionAnnotations(it, basePackageName)) } }
+                        .also { b -> operation.responses?.let { b.addAnnotations(operationExceptionAnnotations(it)) } }
                         .addAnnotation(operationTypeAnnotation(operation, path))
                         .also { b -> operation.request?.consumes?.let { consumes -> b.addAnnotation(operationContentTypeAnnotation(consumes)) } }
                         .addParameters(operation.queryParams() + operation.pathParams() + operation.headerParams() + operation.requestParams(modelMapping))
@@ -61,12 +61,12 @@ object ApiBuilder {
                     .also { ab -> consumes.forEach { ab.addMember("%S", it) } }
                     .build()
 
-    private fun operationExceptionAnnotations(responses: List<Response>, basePackageName: String): List<AnnotationSpec> {
+    private fun operationExceptionAnnotations(responses: List<Response>): List<AnnotationSpec> {
         val non2xxStatusResponseFromOperation = responses.filter { it.defaultOrStatus != "default" && it.defaultOrStatus != "200" && it.defaultOrStatus != "201" }.map { it.defaultOrStatus.toInt() }
-        val exceptionClassesForNon2xxResponses = non2xxStatusResponseFromOperation.let { Non200ResponseHandler.getExceptionClassFor(it) }
+        val exceptionClassesForNon2xxResponses = non2xxStatusResponseFromOperation.let { HttpStatusToExceptionClassMapper().getExceptionClassFor(it) }
         return exceptionClassesForNon2xxResponses.map { exceptionClass ->
             AnnotationSpec.builder(Throws::class)
-                    .addMember("%T::class", ClassName("$basePackageName.exceptions", exceptionClass))
+                    .addMember("%T::class", exceptionClass.asClassName())
                     .build()
         }
     }

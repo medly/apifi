@@ -1,6 +1,5 @@
 package apifi.codegen
 
-import apifi.codegen.exceptions.Non200ResponseHandler
 import apifi.parser.models.Spec
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.TypeSpec
@@ -13,9 +12,7 @@ class CodeGenerator {
 
         val apiClassFiles = apiGroups.map { ApiBuilder.build(it.key!!, it.value, basePackageName, modelMapping) }
 
-        val exceptionClassesAndHandlerFiles = Non200ResponseHandler.generateExceptionClassesAndHandlers(basePackageName)
-
-        return (apiClassFiles + modelFiles + exceptionClassesAndHandlerFiles)
+        return (apiClassFiles + modelFiles)
     }
 
 }

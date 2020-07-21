@@ -1,6 +1,6 @@
 package com.pets
 
-import com.pets.exceptions.BadRequestException
+import apifi.micronaut.exceptions.BadRequestException
 import com.pets.models.Pet
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body

@@ -119,8 +119,8 @@ class ApiBuilderTest : DescribeSpec({
             val api = ApiBuilder.build("pets", listOf(Path("/pets", listOf(operation))), "apifi.gen", modelMapping())
 
             val apiClass = api.members[0] as TypeSpec
-            apiClass.funSpecs[0].annotations[0].toString() shouldBe "@kotlin.jvm.Throws(apifi.gen.exceptions.BadRequestException::class)"
-            apiClass.funSpecs[0].annotations[1].toString() shouldBe "@kotlin.jvm.Throws(apifi.gen.exceptions.ForbiddenException::class)"
+            apiClass.funSpecs[0].annotations[0].toString() shouldBe "@kotlin.jvm.Throws(apifi.micronaut.exceptions.BadRequestException::class)"
+            apiClass.funSpecs[0].annotations[1].toString() shouldBe "@kotlin.jvm.Throws(apifi.micronaut.exceptions.ForbiddenException::class)"
         }
 
         it("should add @throws for InternalServerException if no specific exception for an http status is found") {
@@ -131,7 +131,7 @@ class ApiBuilderTest : DescribeSpec({
             val api = ApiBuilder.build("pets", listOf(Path("/pets", listOf(operation))), "apifi.gen", modelMapping())
 
             val apiClass = api.members[0] as TypeSpec
-            apiClass.funSpecs[0].annotations[0].toString() shouldBe "@kotlin.jvm.Throws(apifi.gen.exceptions.InternalServerErrorException::class)"
+            apiClass.funSpecs[0].annotations[0].toString() shouldBe "@kotlin.jvm.Throws(apifi.micronaut.exceptions.InternalServerErrorException::class)"
         }
     }
 
