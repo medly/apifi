@@ -43,8 +43,12 @@ subprojects {
 }
 
 project(":codegen") {
+    configurations {
+        testCompile.extendsFrom compileOnly
+    }
+
     dependencies {
-        implementation project(":runtime-micronaut")
+        compileOnly project(":runtime-micronaut")
         implementation 'io.swagger.parser.v3:swagger-parser-v3:2.0.16'
         implementation 'org.openapitools:openapi-generator-cli:3.3.4'
         implementation 'com.squareup:kotlinpoet:1.5.0'
