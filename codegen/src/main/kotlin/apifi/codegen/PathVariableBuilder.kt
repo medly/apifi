@@ -8,6 +8,6 @@ import com.squareup.kotlinpoet.ParameterSpec
 object PathVariableBuilder {
   fun build(pathParam: Param): ParameterSpec =
       ParameterSpec.builder(pathParam.name, pathParam.dataType.toKotlinPoetType().copy(nullable = !pathParam.isRequired))
-          .addAnnotation(ClassName("io.micronaut.http.annotation", "PathVariable"))
+          .addAnnotation(ClassName(micronautHttpAnnotationPackage, "PathVariable"))
           .build()
 }

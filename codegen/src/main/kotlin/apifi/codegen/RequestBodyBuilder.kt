@@ -7,6 +7,6 @@ import com.squareup.kotlinpoet.ParameterSpec
 object RequestBodyBuilder {
   fun build(bodyType: String, modelMapping: Map<String, String>): ParameterSpec =
       ParameterSpec.builder("body", bodyType.toKotlinPoetType(modelMapping))
-          .addAnnotation(ClassName("io.micronaut.http.annotation", "Body"))
+          .addAnnotation(ClassName(micronautHttpAnnotationPackage, "Body"))
           .build()
 }

@@ -1,5 +1,6 @@
 package apifi.parser
 
+import apifi.codegen.micronautMultipartFileUploadPackage
 import apifi.models.Model
 import apifi.models.Property
 import apifi.parser.models.Request
@@ -37,7 +38,7 @@ class RequestBodyParserTest : DescribeSpec({
             val file = FileUtils.getFile("src", "test-res", "parser", "request", "with-multipart-content-type.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
             val request = RequestBodyParser.parse(openApi.paths["/pet/{id}/uploadDoc"]?.post?.requestBody, "uploadDocument")
-            request?.result shouldBe Request("io.micronaut.http.multipart.CompleteFileUpload", listOf("multipart/form-data"))
+            request?.result shouldBe Request(micronautMultipartFileUploadPackage, listOf("multipart/form-data"))
             request?.models shouldBe emptyList()
         }
     }

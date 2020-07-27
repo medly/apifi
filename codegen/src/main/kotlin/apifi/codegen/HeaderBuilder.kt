@@ -11,7 +11,7 @@ object HeaderBuilder {
     fun build(pathParam: Param): ParameterSpec =
             ParameterSpec.builder(toCamelCase(pathParam.name), pathParam.dataType.toKotlinPoetType().copy(nullable = !pathParam.isRequired))
                     .addAnnotation(
-                            AnnotationSpec.builder(ClassName("io.micronaut.http.annotation", "Header"))
+                            AnnotationSpec.builder(ClassName(micronautHttpAnnotationPackage, "Header"))
                                     .addMember("value = %S", pathParam.name)
                                     .build())
                     .build()
