@@ -10,11 +10,11 @@ class ControllerInterfaceBuilderTest : DescribeSpec({
     describe("Controller Interface Builder") {
         it("should generate controller interface with operations") {
             val path1 = Path("/pets", listOf(
-                    Operation(PathItem.HttpMethod.GET, "getOpName", emptyList(), null, null, null, SecurityDefinitionType.BASIC_AUTH),
-                    Operation(PathItem.HttpMethod.POST, "postOpName", emptyList(), null, null, null, SecurityDefinitionType.BASIC_AUTH)
+                    Operation(PathItem.HttpMethod.GET, "getOpName", emptyTags(), emptyParams(), null, emptyResponses(), SecurityDefinitionType.BASIC_AUTH),
+                    Operation(PathItem.HttpMethod.POST, "postOpName", emptyTags(), emptyParams(), null, emptyResponses(), SecurityDefinitionType.BASIC_AUTH)
             ))
             val path2 = Path("/pets/{petId}", listOf(
-                    Operation(PathItem.HttpMethod.GET, "getPet", emptyList(), null, null, null, SecurityDefinitionType.BASIC_AUTH)
+                    Operation(PathItem.HttpMethod.GET, "getPet", emptyTags(), emptyParams(), null, emptyResponses(), SecurityDefinitionType.BASIC_AUTH)
             ))
             val controllerInterface = ControllerInterfaceBuilder.build(listOf(path1, path2), "Pets")
             controllerInterface.name shouldBe "PetsController"
@@ -28,7 +28,7 @@ class ControllerInterfaceBuilderTest : DescribeSpec({
             val headerParam = Param("x-header", "kotlin.String", true, ParamType.Header)
 
             val path = Path("/pets", listOf(
-                    Operation(PathItem.HttpMethod.GET, "opName", emptyList(), listOf(queryParam, pathParam, headerParam), Request("Pet", listOf("application/json")), listOf(Response("200", "PetResponse")), SecurityDefinitionType.BASIC_AUTH)
+                    Operation(PathItem.HttpMethod.GET, "opName", emptyTags(), listOf(queryParam, pathParam, headerParam), Request("Pet", listOf("application/json")), listOf(Response("200", "PetResponse")), SecurityDefinitionType.BASIC_AUTH)
             ))
             val controllerInterface = ControllerInterfaceBuilder.build(listOf(path), "Pets")
 
@@ -42,7 +42,7 @@ class ControllerInterfaceBuilderTest : DescribeSpec({
             val headerParam = Param("x-header", "kotlin.String", true, ParamType.Header)
 
             val path = Path("/pets", listOf(
-                    Operation(PathItem.HttpMethod.GET, "opName", emptyList(), listOf(queryParam, pathParam, headerParam), Request(micronautMultipartFileUploadPackage, listOf("multipart/form-data")), listOf(Response("200", "PetResponse")), SecurityDefinitionType.BASIC_AUTH)
+                    Operation(PathItem.HttpMethod.GET, "opName", emptyTags(), listOf(queryParam, pathParam, headerParam), Request(micronautMultipartFileUploadPackage, listOf("multipart/form-data")), listOf(Response("200", "PetResponse")), SecurityDefinitionType.BASIC_AUTH)
             ))
             val controllerInterface = ControllerInterfaceBuilder.build(listOf(path), "Pets")
 

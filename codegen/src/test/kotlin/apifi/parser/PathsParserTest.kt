@@ -1,5 +1,6 @@
 package apifi.parser
 
+import apifi.codegen.emptyParams
 import apifi.parser.models.Param
 import apifi.parser.models.ParamType
 import io.kotest.core.spec.style.DescribeSpec
@@ -16,7 +17,7 @@ class PathsParserTest : DescribeSpec({
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
             val path = PathsParser.parse(openApi.paths).result[0]
             path.url shouldBe "/pets"
-            path.operations!![0].params shouldBe null
+            path.operations!![0].params shouldBe emptyParams()
             path.operations!![0].type shouldBe HttpMethod.GET
             path.operations!![0].name shouldBe "get"
             path.operations!![0].tags shouldBe listOf("pets")
@@ -27,7 +28,7 @@ class PathsParserTest : DescribeSpec({
             val path = PathsParser.parse(openApi.paths).result[0]
             path.url shouldBe "/pets"
             path.operations!![0].type shouldBe HttpMethod.POST
-            path.operations!![0].params!![0] shouldBe Param("limit", "kotlin.Int", false, ParamType.Query)
+            path.operations!![0].params[0] shouldBe Param("limit", "kotlin.Int", false, ParamType.Query)
             path.operations!![0].name shouldBe "listPets"
         }
         it("with path params") {
@@ -36,7 +37,7 @@ class PathsParserTest : DescribeSpec({
             val path = PathsParser.parse(openApi.paths).result[0]
             path.url shouldBe "/pets/{petId}"
             path.operations!![0].type shouldBe HttpMethod.GET
-            path.operations!![0].params!![0] shouldBe Param("petId", "kotlin.String", true, ParamType.Path)
+            path.operations!![0].params[0] shouldBe Param("petId", "kotlin.String", true, ParamType.Path)
             path.operations!![0].name shouldBe "showPetById"
         }
         it("with headers") {
@@ -45,7 +46,7 @@ class PathsParserTest : DescribeSpec({
             val path = PathsParser.parse(openApi.paths).result[0]
             path.url shouldBe "/pets"
             path.operations!![0].type shouldBe HttpMethod.POST
-            path.operations!![0].params!![0] shouldBe Param("x-header", "kotlin.String", true, ParamType.Header)
+            path.operations!![0].params[0] shouldBe Param("x-header", "kotlin.String", true, ParamType.Header)
             path.operations!![0].name shouldBe "createPets"
         }
     }

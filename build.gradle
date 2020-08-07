@@ -46,8 +46,8 @@ project(":codegen") {
 
     dependencies {
         implementation 'io.swagger.parser.v3:swagger-parser-v3:2.0.16'
-        implementation 'org.openapitools:openapi-generator-cli:3.3.4'
-        implementation 'com.squareup:kotlinpoet:1.5.0'
+        implementation 'org.openapitools:openapi-generator-cli:4.3.1'
+        implementation 'com.squareup:kotlinpoet:1.6.0'
 
         implementation  'org.slf4j:slf4j-simple:1.7.30'
         implementation 'org.apache.commons:commons-text:1.8'

@@ -12,7 +12,7 @@ fun toTitleCase(s: String): String = CaseUtils.toCamelCase(s, true, '_', '-', '/
 
 fun toCamelCase(s: String): String = CaseUtils.toCamelCase(s, false, '_', '-', ' ', '/')
 
-fun <T> Schema<T>.toCodeGenModel(name: String): CodegenModel = KotlinClientCodegen().fromModel(name, this, null)
+fun <T> Schema<T>.toCodeGenModel(name: String): CodegenModel = KotlinClientCodegen().fromModel(name, this)
 fun <T> Schema<T>.toCodeGenModel(): CodegenModel = this.toCodeGenModel("any")
 
 fun String.toKotlinPoetType(): TypeName = toKotlinPoetType(emptyMap())
