@@ -1,5 +1,5 @@
 dependencies {
-    implementation project(":runtime")
+    implementation(group: 'com.medly.apifi', name: 'runtime', version: this.getVersion())
 }
 
 tasks.register('apifi', apifi.ApifiCodegen)
