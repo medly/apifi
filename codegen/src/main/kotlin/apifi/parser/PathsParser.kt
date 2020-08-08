@@ -1,9 +1,9 @@
 package apifi.parser
 
 import apifi.helpers.toCamelCase
-import apifi.helpers.toCodeGenModel
 import apifi.helpers.toTitleCase
-import apifi.models.*
+import apifi.helpers.typeDeclaration
+import apifi.models.Model
 import apifi.parser.models.*
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.Paths
@@ -14,7 +14,7 @@ object PathsParser {
         return ParseResult(paths?.map { (endpoint, config) ->
             val operations = config.readOperationsMap().map { (httpMethod, operation) ->
                 val params = operation.parameters?.map { param ->
-                    Param(param.name, param.schema.toCodeGenModel().dataType, param.required, ParamType.fromString(param.`in`))
+                    Param(param.name, param.schema.typeDeclaration(), param.required, ParamType.fromString(param.`in`))
                 } ?: emptyList()
                 val operationSpecifier = operationSpecifier(operation, httpMethod, endpoint)
                 val request = RequestBodyParser.parse(operation.requestBody, operationSpecifier)

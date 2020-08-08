@@ -14,6 +14,7 @@ fun toCamelCase(s: String): String = CaseUtils.toCamelCase(s, false, '_', '-', '
 
 fun <T> Schema<T>.toCodeGenModel(name: String): CodegenModel = KotlinClientCodegen().fromModel(name, this)
 fun <T> Schema<T>.toCodeGenModel(): CodegenModel = this.toCodeGenModel("any")
+fun <T> Schema<T>.typeDeclaration(): String = KotlinClientCodegen().getTypeDeclaration(this)
 
 fun String.toKotlinPoetType(): TypeName = toKotlinPoetType(emptyMap())
 
