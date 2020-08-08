@@ -4,13 +4,16 @@ plugins {
     id "com.kdabir.mksrc" version "1.1.0"
 }
 
+subprojects {
+    group = 'com.medly.apifi'
+}
+
 configure(subprojects.findAll {it.name != 'plugin'}) {
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'org.jetbrains.kotlin.kapt'
     apply plugin: "com.kdabir.mksrc"
     apply plugin: "maven-publish"
-
-    group = 'com.medly.apifi'
+    
 
     repositories {
         mavenCentral()
