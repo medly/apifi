@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(":runtime")
+}
+
+tasks.register('apifi', apifi.ApifiCodegen)

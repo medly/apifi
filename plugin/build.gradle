@@ -1,0 +1,8 @@
+plugins {
+    
+    id 'maven-publish'
+}
+
+dependencies {
+    implementation project(":codegen")
+}

@@ -1,4 +1,5 @@
 rootProject.name = 'apifi'
 include 'codegen'
-include 'cli'
 include 'runtime'
+include 'cli'
+include 'plugin'
