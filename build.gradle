@@ -4,7 +4,7 @@ plugins {
     id "com.kdabir.mksrc" version "1.1.0"
 }
 
-subprojects {
+configure(subprojects.findAll {it.name != 'plugin'}) {
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'org.jetbrains.kotlin.kapt'
     apply plugin: "com.kdabir.mksrc"
