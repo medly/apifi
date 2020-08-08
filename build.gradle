@@ -67,7 +67,7 @@ project(":cli") {
     }
 }
 
-project(":runtime-micronaut") {
+project(":runtime") {
 
     dependencies {
         kapt(platform("io.micronaut:micronaut-bom:$micronautVersion"))

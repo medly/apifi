@@ -1,4 +1,4 @@
 rootProject.name = 'apifi'
 include 'codegen'
 include 'cli'
-include 'runtime-micronaut'
+include 'runtime'
