@@ -6,3 +6,13 @@ plugins {
 dependencies {
     implementation project(":codegen")
 }
+
+project.afterEvaluate {
+    tasks.withType(ProcessResources) { processResources ->
+        inputs.property('projectVersion', project.version)
+
+        filesMatching("version.properties") {
+            expand('projectVersion': project.version)
+        }
+    }
+}

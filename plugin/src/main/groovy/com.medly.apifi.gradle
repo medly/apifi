@@ -1,5 +1,7 @@
+def apifiVersion = apifi.VersionLoader.load()
+
 dependencies {
-    implementation(group: 'com.medly.apifi', name: 'runtime', version: this.getVersion())
+    implementation(group: 'com.medly.apifi', name: 'runtime', version: apifiVersion)
 }
 
 tasks.register('apifi', apifi.ApifiCodegen)
