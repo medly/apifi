@@ -4,6 +4,7 @@ import kotlin.Array
 import kotlin.Int
 import kotlin.Long
 import kotlin.String
+import kotlin.collections.Map
 
 data class Pet(
   val id: Long,
@@ -13,7 +14,8 @@ data class Pet(
 )
 
 data class Children(
-  val name: String?
+  val name: String?,
+  val mapping: Map<String, Int>?
 )
 
 data class Error(

@@ -24,7 +24,7 @@ fun String.toKotlinPoetType(packageNameMapping: Map<String, String>): TypeName {
         val parts = this.split('<')
         val primaryType = parts[0]
         val parameters = parts[1].dropLast(1).split(",")
-        withPackage(primaryType).parameterizedBy(parameters.map { withPackage(it) })
+        withPackage(primaryType).parameterizedBy(parameters.map { withPackage(it.trim()) })
     } else {
         withPackage(this)
     }
