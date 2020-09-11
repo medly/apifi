@@ -110,6 +110,11 @@ components:
             properties:
               name:
                 type: string
+              mapping:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
     Error:
       type: object
       required:
