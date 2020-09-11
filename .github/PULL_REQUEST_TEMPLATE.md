@@ -13,13 +13,7 @@ What kind of change does this PR introduce?
 
 -   [ ] Bugfix
 -   [ ] Feature
--   [ ] Code style update (formatting, local variables)
--   [ ] Refactoring (no functional changes, no api changes)
--   [ ] Build related changes
--   [ ] CI related changes
--   [ ] Performance improves
--   [ ] Adding missing tests
--   [ ] Documentation content changes
+-   [ ] Refactoring
 -   [ ] Other... Please describe:
 
 ### What is the current behavior?
