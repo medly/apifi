@@ -12,6 +12,11 @@ class QueryParamBuilderTest : DescribeSpec({
             QueryParamBuilder.build(queryParam).toString().trimIndent() shouldBe "@io.micronaut.http.annotation.QueryValue name: String"
         }
 
+        it("should return correct ParameterSpec for hyphenated query param") {
+            val queryParam = Param("query-name", "String", true, ParamType.Query)
+            QueryParamBuilder.build(queryParam).toString().trimIndent() shouldBe "@io.micronaut.http.annotation.QueryValue(value = \"query-name\") queryName: String"
+        }
+
         it("should return correct ParameterSpec for optional query param") {
             val queryParam = Param("name", "String", false, ParamType.Query)
             QueryParamBuilder.build(queryParam).toString().trimIndent() shouldBe "@io.micronaut.http.annotation.QueryValue name: String?"

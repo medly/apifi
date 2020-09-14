@@ -11,7 +11,7 @@ class ApiMethodBuilder {
 
     fun methodFor(url: String, operation: Operation, modelMapping: Map<String, String>): FunSpec {
 
-        val httpMethodAnnotation = AnnotationSpec.builder(ClassName(micronautHttpAnnotationPackage, toTitleCase(operation.type.toString())))
+        val httpMethodAnnotation = AnnotationSpec.builder(ClassName(micronautHttpAnnotationPackage, operation.type.toString().toLowerCase().toTitleCase()))
                                                                .addMember("value = %S", url)
                                                                .build()
 
@@ -24,7 +24,7 @@ class ApiMethodBuilder {
 
 
         return FunSpec.builder(operation.name)
-                .also { b -> operation.responses?.let { b.addAnnotations(ExceptionAnnotationBuilder().exceptionAnnotationsFor(it)) } }
+                .also { b -> operation.responses.let { b.addAnnotations(ExceptionAnnotationBuilder().exceptionAnnotationsFor(it)) } }
                 .addAnnotation(httpMethodAnnotation)
                 .also { b -> contentTypeAnnotation?.let { b.addAnnotation(it) } }
                 .addParameters(operation.queryParamSpecs() + operation.pathParamSpecs() + operation.headerParamSpecs() + operation.requestParams(modelMapping))

@@ -12,6 +12,11 @@ class PathVariableBuilderTest : DescribeSpec({
             PathVariableBuilder.build(pathParam).toString().trimIndent() shouldBe "@io.micronaut.http.annotation.PathVariable name: String"
         }
 
+        it("should return correct ParameterSpec for hyphenated path param") {
+            val pathParam = Param("param-name", "String", true, ParamType.Path)
+            PathVariableBuilder.build(pathParam).toString().trimIndent() shouldBe "@io.micronaut.http.annotation.PathVariable(value = \"param-name\") paramName: String"
+        }
+
         it("should return correct ParameterSpec for optional path param") {
             val queryParam = Param("name", "String", false, ParamType.Path)
             PathVariableBuilder.build(queryParam).toString().trimIndent() shouldBe "@io.micronaut.http.annotation.PathVariable name: String?"
