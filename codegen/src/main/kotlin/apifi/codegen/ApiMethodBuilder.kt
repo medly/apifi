@@ -19,7 +19,7 @@ class ApiMethodBuilder {
                                                                 .also { ab -> it.forEach { ab.addMember("%S", it) } }
                                                                 .build()}
 
-        val returnStatement =  "HttpResponse.ok(controller.${operation.name}(${(operation.queryParamSpecNames() + operation.pathParamSpecNames() + operation.requestParamNames(modelMapping)).joinToString()}))"
+        val returnStatement =  "HttpResponse.ok(controller.${operation.name}(${(operation.queryParamSpecNames(modelMapping) + operation.pathParamSpecNames(modelMapping) + operation.requestParamNames(modelMapping)).joinToString()}))"
 
 
 
@@ -27,7 +27,7 @@ class ApiMethodBuilder {
                 .also { b -> operation.responses.let { b.addAnnotations(ExceptionAnnotationBuilder().exceptionAnnotationsFor(it)) } }
                 .addAnnotation(httpMethodAnnotation)
                 .also { b -> contentTypeAnnotation?.let { b.addAnnotation(it) } }
-                .addParameters(operation.queryParamSpecs() + operation.pathParamSpecs() + operation.headerParamSpecs() + operation.requestParams(modelMapping))
+                .addParameters(operation.queryParamSpecs(modelMapping) + operation.pathParamSpecs(modelMapping) + operation.headerParamSpecs() + operation.requestParams(modelMapping))
                 .also { operation.returnType(modelMapping)?.let { rt -> it.returns(rt) } }
                 .addStatement("return $returnStatement")
                 .build()

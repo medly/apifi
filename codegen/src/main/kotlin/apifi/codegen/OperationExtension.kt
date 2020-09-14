@@ -10,15 +10,15 @@ import com.squareup.kotlinpoet.ParameterizedTypeName
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 
 
-fun Operation.queryParamSpecs() = params.filter { it.type == ParamType.Query }.map(QueryParamBuilder::build)
+fun Operation.queryParamSpecs(modelMapping: Map<String, String>) = queryParams().map { QueryParamBuilder.build(it, modelMapping) }
 
-fun Operation.queryParamSpecNames() = params.filter { it.type == ParamType.Query }.map(QueryParamBuilder::build).map { it.name }
+fun Operation.queryParamSpecNames(modelMapping: Map<String, String>) = queryParamSpecs(modelMapping).map { it.name }
 
 fun Operation.queryParams(): List<Param> = params.filter { it.type == ParamType.Query }
 
-fun Operation.pathParamSpecs() = params.filter { it.type == ParamType.Path }.map(PathVariableBuilder::build)
+fun Operation.pathParamSpecs(modelMapping: Map<String, String>) = pathParams().map { PathVariableBuilder.build(it, modelMapping) }
 
-fun Operation.pathParamSpecNames() = params.filter { it.type == ParamType.Path }.map(PathVariableBuilder::build).map { it.name }
+fun Operation.pathParamSpecNames(modelMapping: Map<String, String>) = pathParamSpecs(modelMapping).map { it.name }
 
 fun Operation.pathParams(): List<Param> = params.filter { it.type == ParamType.Path }
 
@@ -26,14 +26,14 @@ fun Operation.headerParamSpecs() = params.filter { it.type == ParamType.Header }
 
 fun Operation.requestParams(modelMapping: Map<String, String>) = request?.let {
     listOf(ParameterSpec.builder("body", it.type.toKotlinPoetType(modelMapping))
-            .addAnnotation(ClassName(micronautHttpAnnotationPackage, "Body"))
-            .build())
+        .addAnnotation(ClassName(micronautHttpAnnotationPackage, "Body"))
+        .build())
 } ?: emptyList()
 
 fun Operation.requestParamNames(modelMapping: Map<String, String>) = request?.let {
     listOf(ParameterSpec.builder("body", it.type.toKotlinPoetType(modelMapping))
-            .addAnnotation(ClassName(micronautHttpAnnotationPackage, "Body"))
-            .build())
+        .addAnnotation(ClassName(micronautHttpAnnotationPackage, "Body"))
+        .build())
 }?.map { it.name } ?: emptyList()
 
 fun Operation.returnType(modelMapping: Map<String, String>): ParameterizedTypeName? =

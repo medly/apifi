@@ -8,8 +8,8 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ParameterSpec
 
 object QueryParamBuilder {
-    fun build(queryParam: Param): ParameterSpec =
-        ParameterSpec.builder(queryParam.name.toCamelCase(), queryParam.dataType.toKotlinPoetType().copy(nullable = !queryParam.isRequired))
+    fun build(queryParam: Param, modelMapping: Map<String, String>): ParameterSpec =
+        ParameterSpec.builder(queryParam.name.toCamelCase(), queryParam.dataType.toKotlinPoetType(modelMapping).copy(nullable = !queryParam.isRequired))
             .addAnnotation(AnnotationSpec.builder(ClassName(micronautHttpAnnotationPackage, "QueryValue"))
                 .also { if (queryParam.name != queryParam.name.toCamelCase()) it.addMember("value = %S", queryParam.name) }
                 .build())
