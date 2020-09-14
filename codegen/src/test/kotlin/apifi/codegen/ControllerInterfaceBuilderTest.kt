@@ -24,7 +24,7 @@ class ControllerInterfaceBuilderTest : DescribeSpec({
 
         it("should generate controller interface methods with methods including params") {
             val queryParam = Param("limit", "kotlin.Int", true, ParamType.Query)
-            val pathParam = Param("petId", "kotlin.Int", true, ParamType.Path)
+            val pathParam = Param("pet-id", "kotlin.Int", true, ParamType.Path)
             val headerParam = Param("x-header", "kotlin.String", true, ParamType.Header)
 
             val path = Path("/pets", listOf(
