@@ -4,6 +4,7 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeName
 import io.swagger.v3.oas.models.media.Schema
+import io.swagger.v3.oas.models.media.StringSchema
 import org.apache.commons.text.CaseUtils
 import org.openapitools.codegen.CodegenModel
 import org.openapitools.codegen.languages.KotlinClientCodegen
@@ -15,6 +16,7 @@ fun toCamelCase(s: String): String = CaseUtils.toCamelCase(s, false, '_', '-', '
 fun <T> Schema<T>.toCodeGenModel(name: String): CodegenModel = KotlinClientCodegen().fromModel(name, this)
 fun <T> Schema<T>.toCodeGenModel(): CodegenModel = this.toCodeGenModel("any")
 fun <T> Schema<T>.typeDeclaration(): String = KotlinClientCodegen().getTypeDeclaration(this)
+fun <T> Schema<T>.isEnum(): Boolean = this is StringSchema && enum != null
 
 fun String.toKotlinPoetType(): TypeName = toKotlinPoetType(emptyMap())
 

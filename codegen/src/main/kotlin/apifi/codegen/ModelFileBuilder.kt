@@ -11,23 +11,24 @@ object ModelFileBuilder {
         val builder = FileSpec.builder(packageName, "Models.kt")
         models.forEach { model ->
             builder.addType(
-                    TypeSpec.classBuilder(ClassName(packageName, model.name))
-                            .addModifiers(KModifier.DATA)
-                            .primaryConstructor(
-                                    FunSpec.constructorBuilder()
-                                            .addParameters(model.properties.map {
-                                                ParameterSpec.builder(
-                                                        it.name,
-                                                        it.dataType.toKotlinPoetType(baseModelMapping).copy(nullable = it.nullable)
-                                                ).build()
-                                            }).build()
-                            )
-                            .addProperties(model.properties.map {
-                                PropertySpec.builder(it.name, it.dataType.toKotlinPoetType(baseModelMapping).copy(nullable = it.nullable))
-                                        .initializer(it.name)
-                                        .build()
-                            })
-                            .build())
+                TypeSpec.classBuilder(ClassName(packageName, model.name))
+                    .addModifiers(if (model.enumValues.isEmpty()) KModifier.DATA else KModifier.ENUM)
+                    .primaryConstructor(
+                        FunSpec.constructorBuilder()
+                            .addParameters(model.properties.map {
+                                ParameterSpec.builder(
+                                    it.name,
+                                    it.dataType.toKotlinPoetType(baseModelMapping).copy(nullable = it.nullable)
+                                ).build()
+                            }).build()
+                    )
+                    .addProperties(model.properties.map {
+                        PropertySpec.builder(it.name, it.dataType.toKotlinPoetType(baseModelMapping).copy(nullable = it.nullable))
+                            .initializer(it.name)
+                            .build()
+                    })
+                    .also { model.enumValues.forEach { enumValue -> it.addEnumConstant(enumValue) } }
+                    .build())
         }
         return builder.build()
     }

@@ -81,6 +81,12 @@ components:
             properties:
               name:
                 type: string
+              gender:
+                type: string
+                enum:
+                  - MALE
+                  - FEMALE
+                  - OTHERS
     Error:
       type: object
       required:
