@@ -11,7 +11,7 @@ class CodeGenerator {
         val apiGroups = spec.paths.groupBy { it.operations?.firstOrNull()?.tags?.firstOrNull() }.filter { it.key != null }
 
         val apiBuilder = ApiBuilder()
-        val apiClassFiles = apiGroups.map { apiBuilder.build(it.key!!, it.value, basePackageName, modelMapping) }
+        val apiClassFiles = apiGroups.map { apiBuilder.build(it.key!!, it.value, basePackageName, modelMapping, spec.securityDefinitions) }
 
         return (apiClassFiles + modelFiles)
     }

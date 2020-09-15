@@ -2,17 +2,21 @@ package apifi.codegen
 
 import apifi.helpers.toTitleCase
 import apifi.parser.models.Path
+import apifi.parser.models.SecurityDefinition
 import com.squareup.kotlinpoet.*
 
 class ApiBuilder(private val apiMethodBuilder: ApiMethodBuilder = ApiMethodBuilder()) {
 
-    fun build(name: String, paths: List<Path>, basePackageName: String, modelMapping: Map<String, String>): FileSpec {
+    fun build(name: String, paths: List<Path>, basePackageName: String, modelMapping: Map<String, String>, securityDefinitions: List<SecurityDefinition>): FileSpec {
         val baseName = name.toTitleCase()
         val controllerClassName = "${baseName}Api"
 
         val controllerInterfaceClass = ControllerInterfaceBuilder.build(paths, baseName)
 
-        val allControllerFunSpecs = paths.flatMap { path -> path.operations?.map { op -> apiMethodBuilder.methodFor(path.url, op, modelMapping) }?: emptyList() }
+        val allControllerFunSpecs = paths.flatMap { path ->
+            path.operations?.map { op -> apiMethodBuilder.methodFor(path.url, op, modelMapping, securityDefinitions) }
+                    ?: emptyList()
+        }
 
         val classSpec = TypeSpec.classBuilder(ClassName(basePackageName, controllerClassName))
                 .addAnnotation(AnnotationSpec.builder(ClassName(micronautHttpAnnotationPackage, "Controller"))

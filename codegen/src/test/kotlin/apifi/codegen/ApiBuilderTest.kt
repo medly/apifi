@@ -14,7 +14,7 @@ class ApiBuilderTest : DescribeSpec({
     describe("Api Builder") {
         it("generate api class with controller annotation") {
             val path = Path("/pets", listOf(Operation(PathItem.HttpMethod.GET, "listPets", emptyTags(), emptyParams(), null, emptyResponses())))
-            val api = ApiBuilder().build("pets", listOf(path), "apifi.gen", testModelMapping())
+            val api = ApiBuilder().build("pets", listOf(path), "apifi.gen", testModelMapping(), emptyList())
             val apiClass = api.members[0] as TypeSpec
             apiClass.name shouldBe "PetsApi"
             apiClass.annotationSpecs[0].toString() shouldBe "@io.micronaut.http.annotation.Controller"
@@ -28,7 +28,7 @@ class ApiBuilderTest : DescribeSpec({
             val path2 = Path("/pets/{petId}", listOf(
                     Operation(PathItem.HttpMethod.GET, "getPet", emptyTags(), emptyParams(), null, emptyResponses(), SecurityDefinitionType.BASIC_AUTH)
             ))
-            val api = ApiBuilder().build("pets", listOf(path1, path2), "apifi.gen", testModelMapping())
+            val api = ApiBuilder().build("pets", listOf(path1, path2), "apifi.gen", testModelMapping(), emptyList())
             val apiClass = api.members[0] as TypeSpec
             apiClass.funSpecs.size shouldBe 3
             apiClass.funSpecs[0].toString() shouldBe "@io.micronaut.http.annotation.Get(value = \"/pets\")\n" +
@@ -42,7 +42,7 @@ class ApiBuilderTest : DescribeSpec({
         it("inject controller") {
             val operation = Operation(PathItem.HttpMethod.POST, "listPets", emptyTags(), emptyParams(), Request("Pet", emptyList()), listOf(Response("200", "PetResponse")))
 
-            val api = ApiBuilder().build("pets", listOf(Path("/pets", listOf(operation))), "apifi.gen", testModelMapping())
+            val api = ApiBuilder().build("pets", listOf(Path("/pets", listOf(operation))), "apifi.gen", testModelMapping(), emptyList())
 
             val apiClass = api.members[0] as TypeSpec
             val controllerClass = api.members[1] as TypeSpec
