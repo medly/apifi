@@ -2,19 +2,18 @@ package apifi.codegen
 
 import apifi.helpers.toTitleCase
 import apifi.parser.models.Path
-import apifi.parser.models.SecurityDefinition
 import com.squareup.kotlinpoet.*
 
 class ApiBuilder(private val apiMethodBuilder: ApiMethodBuilder = ApiMethodBuilder()) {
 
-    fun build(name: String, paths: List<Path>, basePackageName: String, modelMapping: Map<String, String>, securityDefinitions: List<SecurityDefinition>): FileSpec {
+    fun build(name: String, paths: List<Path>, basePackageName: String, modelMapping: Map<String, String>, securityProvider: SecurityProvider): FileSpec {
         val baseName = name.toTitleCase()
         val controllerClassName = "${baseName}Api"
 
-        val controllerInterfaceClass = ControllerInterfaceBuilder.build(paths, baseName)
+        val controllerInterfaceClass = ControllerInterfaceBuilder.build(paths, baseName, securityProvider)
 
         val allControllerFunSpecs = paths.flatMap { path ->
-            path.operations?.map { op -> apiMethodBuilder.methodFor(path.url, op, modelMapping, securityDefinitions) }
+            path.operations?.map { op -> apiMethodBuilder.methodFor(path.url, op, modelMapping, securityProvider) }
                     ?: emptyList()
         }
 

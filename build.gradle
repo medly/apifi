@@ -26,6 +26,7 @@ configure(subprojects.findAll {it.name != 'plugin'}) { // no java component publ
         testImplementation 'io.kotest:kotest-assertions-core-jvm:4.1.1'
         testImplementation 'io.kotest:kotest-property-jvm:4.1.1'
         testImplementation 'io.kotest:kotest-runner-console-jvm:4.1.1'
+        testImplementation "io.mockk:mockk:1.9.3"
     }
 
     test {

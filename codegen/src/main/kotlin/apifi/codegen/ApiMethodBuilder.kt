@@ -2,8 +2,6 @@ package apifi.codegen
 
 import apifi.helpers.toTitleCase
 import apifi.parser.models.Operation
-import apifi.parser.models.SecurityDefinition
-import apifi.parser.models.SecurityDefinitionType
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FunSpec
@@ -11,21 +9,21 @@ import com.squareup.kotlinpoet.ParameterSpec
 
 class ApiMethodBuilder {
 
-    fun methodFor(url: String, operation: Operation, modelMapping: Map<String, String>, securityDefinitions: List<SecurityDefinition>): FunSpec {
+    fun methodFor(url: String, operation: Operation, modelMapping: Map<String, String>, securityProvider: SecurityProvider): FunSpec {
 
         val httpMethodAnnotation = AnnotationSpec.builder(ClassName(micronautHttpAnnotationPackage, operation.type.toString().toLowerCase().toTitleCase()))
             .addMember("value = %S", url)
             .build()
 
         val contentTypeAnnotation = operation.request?.consumes?.let {
-            AnnotationSpec.builder(ClassName(micronautHttpAnnotationPackage, "Consumes"))
-                .also { ab -> it.forEach { ab.addMember("%S", it) } }
-                .build()
+            if (it.isNotEmpty()) AnnotationSpec.builder(ClassName(micronautHttpAnnotationPackage, "Consumes"))
+                .also { ab -> it.forEach { type -> ab.addMember("%S", type) } }
+                .build() else null
         }
 
         val securityParameters =
             when {
-                securityDefinitions.any { it.type == SecurityDefinitionType.OIDC } ->
+                securityProvider.shouldAuthenticate(operation) ->
                     listOf(ParameterSpec.builder("authentication", ClassName(micronautSecurityAuthenticationPackage, "Authentication").copy(nullable = true)).build())
                 else -> emptyList()
             }

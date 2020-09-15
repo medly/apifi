@@ -64,7 +64,7 @@ enum class SecurityDefinitionType {
     BASIC_AUTH, BEARER, OIDC;
 
     companion object {
-        fun fromTypeAndScheme(type: SecurityScheme.Type, scheme: String) =
+        fun fromTypeAndScheme(type: SecurityScheme.Type, scheme: String?) =
                 when {
                     type == SecurityScheme.Type.HTTP && scheme == "basic" -> BASIC_AUTH
                     type == SecurityScheme.Type.HTTP && scheme == "bearer" -> BEARER
