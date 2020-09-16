@@ -21,14 +21,14 @@ object PathsParser {
                 val responses = ResponseBodyParser.parse(operation.responses, operationSpecifier)
                 models.addAll(request?.models ?: emptyList())
                 models.addAll(responses?.models ?: emptyList())
-                Operation(httpMethod, operation.operationId ?: toCamelCase(httpMethod.toString()),
-                        operation.tags ?: emptyList(), params, request?.result, responses?.result ?: emptyList())
+                Operation(httpMethod, operation.operationId ?: httpMethod.toString().toLowerCase(),
+                    operation.tags ?: emptyList(), params, request?.result, responses?.result ?: emptyList())
             }
             Path(endpoint, operations)
         } ?: emptyList(), models)
     }
 
     private fun operationSpecifier(operation: io.swagger.v3.oas.models.Operation, httpMethod: PathItem.HttpMethod, endpoint: String) =
-            (operation.operationId
-                    ?: toTitleCase(httpMethod.toString() + endpoint.replace(Regex("[^A-Za-z ]"), " ")))
+        (operation.operationId
+            ?: (httpMethod.toString() + endpoint.replace(Regex("[^A-Za-z ]"), " ")).toTitleCase())
 }

@@ -9,9 +9,9 @@ import org.apache.commons.text.CaseUtils
 import org.openapitools.codegen.CodegenModel
 import org.openapitools.codegen.languages.KotlinClientCodegen
 
-fun toTitleCase(s: String): String = CaseUtils.toCamelCase(s, true, '_', '-', '/')
-
-fun toCamelCase(s: String): String = CaseUtils.toCamelCase(s, false, '_', '-', ' ', '/')
+private fun toCamelCase(s: String, capitalizeFirstLetter: Boolean) = if (listOf('_', '-', '/', ' ').any { s.contains(it) }) CaseUtils.toCamelCase(s, capitalizeFirstLetter, '_', '-', '/', ' ') else s
+fun String.toTitleCase(): String = toCamelCase(this.capitalize(), true)
+fun String.toCamelCase(): String = toCamelCase(this, false)
 
 fun <T> Schema<T>.toCodeGenModel(name: String): CodegenModel = KotlinClientCodegen().fromModel(name, this)
 fun <T> Schema<T>.toCodeGenModel(): CodegenModel = this.toCodeGenModel("any")

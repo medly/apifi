@@ -7,7 +7,7 @@ import com.squareup.kotlinpoet.*
 class ApiBuilder(private val apiMethodBuilder: ApiMethodBuilder = ApiMethodBuilder()) {
 
     fun build(name: String, paths: List<Path>, basePackageName: String, modelMapping: Map<String, String>): FileSpec {
-        val baseName = toTitleCase(name)
+        val baseName = name.toTitleCase()
         val controllerClassName = "${baseName}Api"
 
         val controllerInterfaceClass = ControllerInterfaceBuilder.build(paths, baseName)

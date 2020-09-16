@@ -17,7 +17,7 @@ object ModelParser {
             return modelsFromSchema(name, (schema as ArraySchema).items)
         }
         val codeGenModel = schema.toCodeGenModel(name)
-        val propertyModels = schema.properties?.filter { shouldCreateModel(it.value) }?.flatMap { modelsFromSchema(toTitleCase(it.key), it.value) }
+        val propertyModels = schema.properties?.filter { shouldCreateModel(it.value) }?.flatMap { modelsFromSchema(it.key.toTitleCase(), it.value) }
             ?: emptyList()
 
         val primaryModel = Model(
@@ -34,7 +34,7 @@ object ModelParser {
         property is ObjectSchema || (property is ArraySchema && property.items is ObjectSchema) || property.isEnum()
 
     private fun dataType(property: CodegenProperty, models: List<Model>) =
-        models.firstOrNull { m -> m.name == toTitleCase(property.name) }?.name?.let {
+        models.firstOrNull { m -> m.name == property.name.toTitleCase() }?.name?.let {
             if (property.isListContainer) "kotlin.Array<$it>" else it
         } ?: property.dataType
 
