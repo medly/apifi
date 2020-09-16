@@ -61,13 +61,14 @@ enum class ParamType {
 data class SecurityDefinition(val name: String, val type: SecurityDefinitionType)
 
 enum class SecurityDefinitionType {
-    BASIC_AUTH, BEARER;
+    BASIC_AUTH, BEARER, OIDC;
 
     companion object {
-        fun fromTypeAndScheme(type: SecurityScheme.Type, scheme: String) =
+        fun fromTypeAndScheme(type: SecurityScheme.Type, scheme: String?) =
                 when {
                     type == SecurityScheme.Type.HTTP && scheme == "basic" -> BASIC_AUTH
                     type == SecurityScheme.Type.HTTP && scheme == "bearer" -> BEARER
+                    type == SecurityScheme.Type.OPENIDCONNECT -> OIDC
                     else -> error("Security scheme not supported yet")
                 }
     }
