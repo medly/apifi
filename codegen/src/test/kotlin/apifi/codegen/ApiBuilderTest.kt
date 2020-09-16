@@ -15,7 +15,9 @@ class ApiBuilderTest : DescribeSpec({
 
     val securityProvider = mockk<SecurityProvider>()
     val apiMethodBuilder = ApiMethodBuilder(testModelMapping(), securityProvider)
-    val apiBuilder = ApiBuilder(apiMethodBuilder, "api.gen", securityProvider)
+    val controllerInterfaceBuilder = ControllerInterfaceBuilder(securityProvider)
+    val apiBuilder = ApiBuilder(apiMethodBuilder, controllerInterfaceBuilder, "api.gen")
+    
     beforeTest {
         every { securityProvider.shouldAuthenticate(any()) } returns false
     }

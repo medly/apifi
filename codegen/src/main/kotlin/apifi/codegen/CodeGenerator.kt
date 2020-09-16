@@ -10,7 +10,7 @@ class CodeGenerator {
         val modelMapping = modelFiles.flatMap { it.members.mapNotNull { m -> (m as TypeSpec).name }.map { name -> name to "${it.packageName}.$name" } }.toMap()
         val apiGroups = spec.paths.groupBy { it.operations?.firstOrNull()?.tags?.firstOrNull() }.filter { it.key != null }
         val securityProvider = SecurityProvider(spec.securityDefinitions, spec.securityRequirements)
-        val apiBuilder = ApiBuilder(ApiMethodBuilder(modelMapping, securityProvider), basePackageName, securityProvider)
+        val apiBuilder = ApiBuilder(ApiMethodBuilder(modelMapping, securityProvider), ControllerInterfaceBuilder(securityProvider), basePackageName)
         val apiClassFiles = apiGroups.map { apiBuilder.build(it.key!!, it.value) }
 
         return (apiClassFiles + modelFiles)

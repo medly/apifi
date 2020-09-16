@@ -5,8 +5,8 @@ import apifi.helpers.toKotlinPoetType
 import apifi.parser.models.Path
 import com.squareup.kotlinpoet.*
 
-object ControllerInterfaceBuilder {
-    fun build(paths: List<Path>, baseName: String, securityProvider: SecurityProvider): TypeSpec {
+class ControllerInterfaceBuilder(private val securityProvider: SecurityProvider) {
+    fun build(paths: List<Path>, baseName: String): TypeSpec {
         val controllerMethods = paths.flatMap { path ->
             path.operations?.map { operation ->
                 val queryParams = operation.queryParams()

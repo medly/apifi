@@ -6,14 +6,14 @@ import com.squareup.kotlinpoet.*
 
 class ApiBuilder(
     private val apiMethodBuilder: ApiMethodBuilder,
-    private val basePackageName: String,
-    private val securityProvider: SecurityProvider
+    private val controllerInterfaceBuilder: ControllerInterfaceBuilder,
+    private val basePackageName: String
 ) {
     fun build(name: String, paths: List<Path>): FileSpec {
         val baseName = name.toTitleCase()
         val controllerClassName = "${baseName}Api"
 
-        val controllerInterfaceClass = ControllerInterfaceBuilder.build(paths, baseName, securityProvider)
+        val controllerInterfaceClass = controllerInterfaceBuilder.build(paths, baseName)
 
         val allControllerFunSpecs = paths.flatMap { path ->
             path.operations?.map { op -> apiMethodBuilder.methodFor(path.url, op) }
