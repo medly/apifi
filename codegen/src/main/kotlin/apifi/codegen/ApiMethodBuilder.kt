@@ -7,10 +7,9 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.ParameterSpec
 
-class ApiMethodBuilder {
+class ApiMethodBuilder(private val modelMapping: Map<String, String>, private val securityProvider: SecurityProvider) {
 
-    fun methodFor(url: String, operation: Operation, modelMapping: Map<String, String>, securityProvider: SecurityProvider): FunSpec {
-
+    fun methodFor(url: String, operation: Operation): FunSpec {
         val httpMethodAnnotation = AnnotationSpec.builder(ClassName(micronautHttpAnnotationPackage, operation.type.toString().toLowerCase().toTitleCase()))
             .addMember("value = %S", url)
             .build()
