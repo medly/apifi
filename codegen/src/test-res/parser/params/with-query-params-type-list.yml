@@ -1,0 +1,16 @@
+openapi: "3.0.0"
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      operationId: listPets
+      parameters:
+        - name: id
+          in: query
+          description: id to filter by
+          required: false
+          style: form
+          schema:
+            type: array
+            items:
+              type: string
