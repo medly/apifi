@@ -1,6 +1,7 @@
 package apifi.parser
 
 import apifi.helpers.isEnum
+import apifi.helpers.replaceArrayToList
 import apifi.helpers.toCodeGenModel
 import apifi.helpers.toTitleCase
 import apifi.models.Model
@@ -37,15 +38,15 @@ object ModelParser {
         val type = models.firstOrNull { m -> m.name == property.name.toTitleCase() }?.name?.let {
             if (property.isListContainer) "kotlin.Array<$it>" else it
         } ?: property.dataType
-        return type.replace(Regex("(.*?)kotlin.Array(.*)"), "$1kotlin.collections.List$2")
+        return type.replaceArrayToList()
     }
 
     fun <T> parseReference(schema: Schema<T>): String {
         val codeGenModel = schema.toCodeGenModel()
         return if (codeGenModel.parent != null) {
-            codeGenModel.parent.replace(Regex("(.*?)kotlin.Array(.*)"), "$1kotlin.collections.List$2")
+            codeGenModel.parent.replaceArrayToList()
         } else {
-            codeGenModel.dataType.replace(Regex("(.*?)kotlin.Array(.*)"), "$1kotlin.collections.List$2")
+            codeGenModel.dataType.replaceArrayToList()
         }
     }
 }

@@ -1,5 +1,6 @@
 package apifi.helpers
 
+import apifi.parser.ModelParser
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeName
@@ -12,6 +13,7 @@ import org.openapitools.codegen.languages.KotlinClientCodegen
 private fun toCamelCase(s: String, capitalizeFirstLetter: Boolean) = if (listOf('_', '-', '/', ' ').any { s.contains(it) }) CaseUtils.toCamelCase(s, capitalizeFirstLetter, '_', '-', '/', ' ') else s
 fun String.toTitleCase(): String = toCamelCase(this.capitalize(), true)
 fun String.toCamelCase(): String = toCamelCase(this, false)
+fun String.replaceArrayToList(): String = this.replace(Regex("(.*?)kotlin.Array(.*)"), "$1kotlin.collections.List$2")
 
 fun <T> Schema<T>.toCodeGenModel(name: String): CodegenModel = KotlinClientCodegen().fromModel(name, this)
 fun <T> Schema<T>.toCodeGenModel(): CodegenModel = this.toCodeGenModel("any")
