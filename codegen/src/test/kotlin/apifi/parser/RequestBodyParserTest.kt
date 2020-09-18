@@ -16,7 +16,7 @@ class RequestBodyParserTest : DescribeSpec({
             val file = FileUtils.getFile("src", "test-res", "parser", "models", "with-separate-schema.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
             val request = RequestBodyParser.parse(openApi.paths["/pets"]?.post?.requestBody, "showById")
-            request?.result shouldBe Request("kotlin.Array<Pet>", listOf("application/json"))
+            request?.result shouldBe Request("kotlin.collections.List<Pet>", listOf("application/json"))
             request?.models shouldBe emptyList()
         }
 
@@ -24,12 +24,12 @@ class RequestBodyParserTest : DescribeSpec({
             val file = FileUtils.getFile("src", "test-res", "parser", "models", "with-inline-request-response-schema.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
             val request = RequestBodyParser.parse(openApi.paths["/pets"]?.post?.requestBody, "showById")
-            request?.result shouldBe Request("kotlin.Array<ShowByIdRequest>", listOf("application/json"))
+            request?.result shouldBe Request("kotlin.collections.List<ShowByIdRequest>", listOf("application/json"))
             request?.models shouldBe listOf(
                     Model("ShowByIdRequest", listOf(
                             Property("id", "kotlin.Long", false),
                             Property("name", "kotlin.String", false),
-                            Property("tags", "kotlin.Array<kotlin.String>", true)
+                            Property("tags", "kotlin.collections.List<kotlin.String>", true)
                     ))
             )
         }

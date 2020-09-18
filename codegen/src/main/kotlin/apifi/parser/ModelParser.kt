@@ -33,17 +33,19 @@ object ModelParser {
     fun shouldCreateModel(property: Schema<Any>) =
         property is ObjectSchema || (property is ArraySchema && property.items is ObjectSchema) || property.isEnum()
 
-    private fun dataType(property: CodegenProperty, models: List<Model>) =
-        models.firstOrNull { m -> m.name == property.name.toTitleCase() }?.name?.let {
+    private fun dataType(property: CodegenProperty, models: List<Model>): String {
+        val type = models.firstOrNull { m -> m.name == property.name.toTitleCase() }?.name?.let {
             if (property.isListContainer) "kotlin.Array<$it>" else it
         } ?: property.dataType
+        return type.replace(Regex("(.*?)kotlin.Array(.*)"), "$1kotlin.collections.List$2")
+    }
 
     fun <T> parseReference(schema: Schema<T>): String {
         val codeGenModel = schema.toCodeGenModel()
         return if (codeGenModel.parent != null) {
-            codeGenModel.parent
+            codeGenModel.parent.replace(Regex("(.*?)kotlin.Array(.*)"), "$1kotlin.collections.List$2")
         } else {
-            codeGenModel.dataType
+            codeGenModel.dataType.replace(Regex("(.*?)kotlin.Array(.*)"), "$1kotlin.collections.List$2")
         }
     }
 }

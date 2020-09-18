@@ -19,8 +19,8 @@ class ModelParserTest : DescribeSpec({
                 Model("Pet", listOf(
                     Property("id", "kotlin.Long", false),
                     Property("name", "kotlin.String", false),
-                    Property("tags", "kotlin.Array<kotlin.String>", true),
-                    Property("children", "kotlin.Array<Children>", true)
+                    Property("tags", "kotlin.collections.List<kotlin.String>", true),
+                    Property("children", "kotlin.collections.List<Children>", true)
                 )),
                 Model("Children", listOf(
                     Property("name", "kotlin.String", true),
@@ -45,7 +45,7 @@ class ModelParserTest : DescribeSpec({
                     Property("name", "kotlin.String", false),
                     Property("tag", "kotlin.String", true),
                     Property("child", "Child", true),
-                    Property("foodChoices", "kotlin.Array<FoodChoice>", true)
+                    Property("foodChoices", "kotlin.collections.List<FoodChoice>", true)
                 )
                 ))
             models[1] shouldBe listOf(Model("Child", listOf(

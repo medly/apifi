@@ -16,11 +16,11 @@ object RequestBodyParser {
             ParseResult(Request(micronautMultipartFileUploadPackage, consumes), emptyList())
         } else requestBody?.content?.entries?.firstOrNull()?.value?.schema?.let {
             if (shouldCreateModel(it)) ModelParser.modelsFromSchema(requestModelName(operationSpecifier), it).let { m -> requestBodyType(m.first().name, it) to m }
-            else parseReference(it) to emptyList()
+            else ModelParser.parseReference(it) to emptyList()
         }?.let { ParseResult(Request(it.first, consumes), it.second) }
     }
 
-    private fun requestBodyType(modelName: String, schema: Schema<Any>) = if (schema is ArraySchema) "kotlin.Array<$modelName>" else modelName
+    private fun requestBodyType(modelName: String, schema: Schema<Any>) = if (schema is ArraySchema) "kotlin.collections.List<$modelName>" else modelName
 
     private fun requestModelName(operationSpecifier: String) = "${operationSpecifier.capitalize()}Request"
 
