@@ -1,6 +1,6 @@
 package apifi.parser
 
-import apifi.helpers.toCamelCase
+import apifi.helpers.replaceArrayToList
 import apifi.helpers.toTitleCase
 import apifi.helpers.typeDeclaration
 import apifi.models.Model
@@ -14,7 +14,7 @@ object PathsParser {
         return ParseResult(paths?.map { (endpoint, config) ->
             val operations = config.readOperationsMap().map { (httpMethod, operation) ->
                 val params = operation.parameters?.map { param ->
-                    Param(param.name, param.schema.typeDeclaration(), param.required, ParamType.fromString(param.`in`))
+                    Param(param.name, param.schema.typeDeclaration().replaceArrayToList(), param.required, ParamType.fromString(param.`in`))
                 } ?: emptyList()
                 val operationSpecifier = operationSpecifier(operation, httpMethod, endpoint)
                 val request = RequestBodyParser.parse(operation.requestBody, operationSpecifier)

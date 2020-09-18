@@ -5,16 +5,16 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import javax.inject.Inject
-import kotlin.Array
+import kotlin.collections.List
 
 @Controller
 class StoreApi @Inject constructor(
   private val controller: StoreController
 ) {
   @Get(value = "/store/inventory")
-  fun get(): HttpResponse<Array<GetStoreInventoryResponse>> = HttpResponse.ok(controller.get())
+  fun get(): HttpResponse<List<GetStoreInventoryResponse>> = HttpResponse.ok(controller.get())
 }
 
 interface StoreController {
-  fun get(): Array<GetStoreInventoryResponse>
+  fun get(): List<GetStoreInventoryResponse>
 }

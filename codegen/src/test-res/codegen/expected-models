@@ -1,16 +1,16 @@
 package com.pets.models
 
-import kotlin.Array
 import kotlin.Int
 import kotlin.Long
 import kotlin.String
+import kotlin.collections.List
 import kotlin.collections.Map
 
 data class Pet(
   val id: Long,
   val name: String,
-  val tags: Array<String>?,
-  val children: Array<Children>?
+  val tags: List<String>?,
+  val children: List<Children>?
 )
 
 data class Children(

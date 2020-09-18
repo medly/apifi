@@ -10,17 +10,20 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Post
 import javax.inject.Inject
-import kotlin.Array
 import kotlin.String
+import kotlin.collections.List
 import kotlin.jvm.Throws
 
 @Controller
 class PetsApi @Inject constructor(
   private val controller: PetsController
 ) {
+  @Get(value = "/pets")
+  fun getPets(): HttpResponse<List<Pet>> = HttpResponse.ok(controller.getPets())
+
   @Post(value = "/pets")
   @Consumes("application/json")
-  fun createPets(@Body body: Array<Pet>): HttpResponse<String> =
+  fun createPets(@Body body: List<Pet>): HttpResponse<String> =
       HttpResponse.ok(controller.createPets(body))
 
   @Throws(BadRequestException::class)
@@ -30,7 +33,9 @@ class PetsApi @Inject constructor(
 }
 
 interface PetsController {
-  fun createPets(body: Array<Pet>): String
+  fun getPets(): List<Pet>
+
+  fun createPets(body: List<Pet>): String
 
   fun showPetById(petId: String): Pet
 }
