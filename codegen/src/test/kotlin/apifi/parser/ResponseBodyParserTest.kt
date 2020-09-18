@@ -23,8 +23,12 @@ class ResponseBodyParserTest : DescribeSpec({
             val file = FileUtils.getFile("src", "test-res", "parser", "models", "with-inline-request-response-schema.yml").readText().trimIndent()
             val openApi = OpenAPIV3Parser().readContents(file).openAPI
             val response = ResponseBodyParser.parse(openApi.paths["/pets"]?.post?.responses, "showByPetId")
-            response?.result shouldBe listOf(Response("default", "ShowByPetIdResponse"))
+            response?.result shouldBe listOf(Response("200", "kotlin.collections.List<ShowByPetIdResponse>"), Response("default", "ShowByPetIdResponse"))
             response?.models shouldBe listOf(
+                    Model("ShowByPetIdResponse", listOf(
+                            Property("id", "kotlin.Long", false),
+                            Property("name", "kotlin.String", false),
+                            Property("tags", "kotlin.collections.List<kotlin.String>", true))),
                     Model("ShowByPetIdResponse", listOf(
                             Property("code", "kotlin.Int", false),
                             Property("message", "kotlin.String", false)

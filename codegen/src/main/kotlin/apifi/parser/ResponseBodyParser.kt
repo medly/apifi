@@ -17,7 +17,7 @@ object ResponseBodyParser {
 		}?.let { ParseResult(it.map { p -> p.first }, it.flatMap { p -> p.second }) }
 	}
 
-	private fun responseBodyType(modelName: String, schema: Schema<Any>) = if (schema is ArraySchema) "kotlin.Array<$modelName>" else modelName
+	private fun responseBodyType(modelName: String, schema: Schema<Any>) = if (schema is ArraySchema) "kotlin.collections.List<$modelName>" else modelName
 
 	private fun responseModelName(operationSpecifier: String) = "${operationSpecifier.capitalize()}Response"
 

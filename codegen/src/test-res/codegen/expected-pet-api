@@ -18,6 +18,9 @@ import kotlin.jvm.Throws
 class PetsApi @Inject constructor(
   private val controller: PetsController
 ) {
+  @Get(value = "/pets")
+  fun getPets(): HttpResponse<List<Pet>> = HttpResponse.ok(controller.getPets())
+
   @Post(value = "/pets")
   @Consumes("application/json")
   fun createPets(@Body body: List<Pet>): HttpResponse<String> =
@@ -30,6 +33,8 @@ class PetsApi @Inject constructor(
 }
 
 interface PetsController {
+  fun getPets(): List<Pet>
+
   fun createPets(body: List<Pet>): String
 
   fun showPetById(petId: String): Pet

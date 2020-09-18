@@ -1,7 +1,6 @@
 package apifi.parser
 
 import apifi.codegen.micronautMultipartFileUploadPackage
-import apifi.parser.ModelParser.parseReference
 import apifi.parser.ModelParser.shouldCreateModel
 import apifi.parser.models.ParseResult
 import apifi.parser.models.Request
